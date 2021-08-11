@@ -1,11 +1,14 @@
 {
   "name": "spearly-js-sdk",
-  "version": "1.0.1",
+  "version": "0.1.0",
   "description": "",
-  "main": "dist/index.js",
+  "main": "dist/cjs/spearly-js-sdk.js",
+  "module": "dist/esm/spearly-js-sdk.js",
+  "unpkg": "dist/umd/spearly-js-sdk.js",
+  "types": "dist/cjs/index.d.ts",
   "scripts": {
     "lint": "eslint --ext .ts,.tsx,.vue --ignore-path .eslintignore . || exit 0",
-    "build": "tsc",
+    "build": "rollup -c",
     "prepare": "husky install"
   },
   "repository": {
@@ -27,6 +30,10 @@
   "devDependencies": {
     "@nuxt/types": "^2.15.7",
     "@nuxtjs/eslint-config-typescript": "^6.0.1",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-commonjs": "^20.0.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.0.4",
     "@types/node-fetch": "^2.5.12",
     "@typescript-eslint/parser": "^4.29.1",
     "eslint": "^7.32.0",
@@ -36,6 +43,9 @@
     "husky": "^7.0.1",
     "lint-staged": "^11.1.2",
     "prettier": "^2.3.2",
+    "rollup": "^2.56.2",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.30.0",
     "typescript": "^4.3.5"
   },
   "dependencies": {
