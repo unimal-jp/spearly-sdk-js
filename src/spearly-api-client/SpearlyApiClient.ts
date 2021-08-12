@@ -1,6 +1,6 @@
 import fetch from 'node-fetch'
 import { camelToSnake, recursiveToCamels } from '../utils'
-import { List, Content } from '../types'
+import { List, Content, Form, FormAnswer } from '../types'
 
 export type BaseHeaders = {
   Authorization: string
@@ -43,6 +43,23 @@ export class SpearlyApiClient {
     }
   }
 
+  async postRequest<T>(endpoint: string, params: { [key: string]: unknown }): Promise<T> {
+    try {
+      const response = await fetch(`${this.baseURL}${endpoint}`, {
+        method: 'POST',
+        body: JSON.stringify(params),
+        headers: { ...this.baseHeaders, 'Content-Type': 'application/json' },
+      })
+      if (!response.ok) throw new Error(`${response.status}`)
+
+      return response.json().then((data) => data as T)
+    } catch (error) {
+      if (error.data) throw error.data
+      if (error.response?.data) throw error.response.data
+      return Promise.reject(new Error(error))
+    }
+  }
+
   async getList(contentTypeId: string, params?: GetParams) {
     const queries = this.bindQueriesFromParams(params)
     const response = await this.getRequest<List>(`/content_types/${contentTypeId}/contents`, queries)
@@ -51,6 +68,26 @@ export class SpearlyApiClient {
 
   async getContent(contentId: string) {
     const response = await this.getRequest<Content>(`/contents/${contentId}`)
+    return recursiveToCamels(response)
+  }
+
+  async getFormLatest(publicUid: string) {
+    const response = await this.getRequest<Form>(`/forms/${publicUid}/latest`)
+    return recursiveToCamels(response)
+  }
+
+  // eslint-disable-next-line
+  async postFormAnswers(formVersionId: number, fields: { [key: string]: unknown } & { _spearly_gotcha: string }) {
+    if (!('_spearly_gotcha' in fields)) throw new Error('Include "_spearly_gotcha" in the fields.')
+    // eslint-disable-next-line
+    const { _spearly_gotcha, ...paramFields } = fields
+
+    const response = await this.postRequest<FormAnswer>('/form_answers', {
+      form_version_id: formVersionId,
+      fields: paramFields,
+      _spearly_gotcha,
+    })
+
     return recursiveToCamels(response)
   }
 

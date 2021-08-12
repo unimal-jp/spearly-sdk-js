@@ -24,7 +24,7 @@ export const recursiveToCamels = (data: AnyObject) => {
     convertedData[camelKey] = data[key]
 
     if (typeof data[key] === 'object') {
-      if (Array.isArray(data)) continue
+      if (data[key] === null || Array.isArray(data)) continue
       convertedData[camelKey] = recursiveToCamels(convertedData[camelKey] as AnyObject)
     }
   }
