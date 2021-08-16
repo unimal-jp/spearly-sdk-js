@@ -5,5 +5,5 @@ export type FormAnswer = {
     ipAddress: string
     userAgent: string
   }
-  createdAt: Date
+  createdAt: string
 }

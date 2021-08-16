@@ -63,17 +63,17 @@ export class SpearlyApiClient {
   async getList(contentTypeId: string, params?: GetParams) {
     const queries = this.bindQueriesFromParams(params)
     const response = await this.getRequest<List>(`/content_types/${contentTypeId}/contents`, queries)
-    return recursiveToCamels(response)
+    return recursiveToCamels<List, List>(response)
   }
 
   async getContent(contentId: string) {
     const response = await this.getRequest<Content>(`/contents/${contentId}`)
-    return recursiveToCamels(response)
+    return recursiveToCamels<Content, Content>(response)
   }
 
   async getFormLatest(publicUid: string) {
     const response = await this.getRequest<Form>(`/forms/${publicUid}/latest`)
-    return recursiveToCamels(response)
+    return recursiveToCamels<Form, Form>(response)
   }
 
   // eslint-disable-next-line
@@ -88,7 +88,7 @@ export class SpearlyApiClient {
       _spearly_gotcha,
     })
 
-    return recursiveToCamels(response)
+    return recursiveToCamels<FormAnswer, FormAnswer>(response)
   }
 
   bindQueriesFromParams(params?: GetParams): string {

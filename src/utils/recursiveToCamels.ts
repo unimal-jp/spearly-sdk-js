@@ -1,33 +1,15 @@
 import { snakeToCamel } from './snakeToCamel'
 
-type AnyObject = {
-  [index: string]: unknown
-}
+export const recursiveToCamels = <T, U>(data: T): T | U => {
+  if (!data || typeof data !== 'object') return data
+  if (data instanceof Date || data instanceof RegExp) return data
+  if (Array.isArray(data)) return data
+  const returns: { [key: string]: unknown } = {}
 
-export const recursiveToCamels = (data: AnyObject) => {
-  const convertedData: AnyObject = {}
+  Object.keys(data).forEach((key) => {
+    const camelCase = snakeToCamel(key)
+    returns[camelCase] = recursiveToCamels((data as unknown as { [key: string]: unknown })[key])
+  }, {})
 
-  if (Array.isArray(data)) {
-    const convertedArrayData: unknown[] = []
-
-    data.forEach((d) => {
-      if (typeof d === 'object') {
-        convertedArrayData.push(recursiveToCamels(d))
-      }
-    })
-
-    return convertedArrayData.length ? convertedArrayData : data
-  }
-
-  for (const key in data) {
-    const camelKey = snakeToCamel(key)
-    convertedData[camelKey] = data[key]
-
-    if (typeof data[key] === 'object') {
-      if (data[key] === null || Array.isArray(data)) continue
-      convertedData[camelKey] = recursiveToCamels(convertedData[camelKey] as AnyObject)
-    }
-  }
-
-  return convertedData
+  return returns as unknown as U
 }

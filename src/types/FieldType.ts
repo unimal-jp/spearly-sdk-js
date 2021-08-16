@@ -11,7 +11,7 @@ export type FieldTypeRichText = FieldType<string>
 
 export type FieldTypeImage = FieldType<string>
 
-export type FieldTypeCalendar = FieldType<Date>
+export type FieldTypeCalendar = FieldType<string>
 
 export type FieldTypeMap = FieldType<{
   preferredFormat: string
