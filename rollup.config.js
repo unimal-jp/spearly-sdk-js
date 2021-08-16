@@ -12,7 +12,7 @@ export default [
     input,
     output: [
       {
-        file: `./dist/cjs/${pkg.name}.js`,
+        file: `./dist/cjs/${pkg.name.split('/')[1]}.js`,
         sourceMap: 'inline',
         format: 'cjs',
       },
@@ -29,7 +29,7 @@ export default [
     input,
     output: [
       {
-        file: `./dist/esm/${pkg.name}.js`,
+        file: `./dist/esm/${pkg.name.split('/')[1]}.js`,
         sourceMap: 'inline',
         format: 'esm',
       },
@@ -46,7 +46,7 @@ export default [
     input,
     output: [
       {
-        file: `./dist/umd/${pkg.name}.js`,
+        file: `./dist/umd/${pkg.name.split('/')[1]}.js`,
         name: 'spearly',
         format: 'umd',
       },
