@@ -1,10 +1,10 @@
 {
-  "name": "@spearly/js-sdk",
+  "name": "@unimal-jp/spearly-js-sdk",
   "version": "0.1.0",
   "description": "",
-  "main": "dist/cjs/js-sdk.js",
-  "module": "dist/esm/js-sdk.js",
-  "unpkg": "dist/umd/js-sdk.js",
+  "main": "dist/cjs/spearly-js-sdk.js",
+  "module": "dist/esm/spearly-js-sdk.js",
+  "unpkg": "dist/umd/spearly-js-sdk.js",
   "types": "dist/cjs/index.d.ts",
   "scripts": {
     "lint": "eslint --ext .ts,.tsx,.vue --ignore-path .eslintignore . || exit 0",
