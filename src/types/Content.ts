@@ -2,9 +2,9 @@ import { FieldTypeAll } from './FieldType'
 
 export type Content = {
   publicUid: string
-  createdAt: Date
-  updatedAt: Date
-  publishedAt: Date
+  createdAt: string
+  updatedAt: string
+  publishedAt: string
   contentAlias: string
   fields: {
     [key: string]: FieldTypeAll
