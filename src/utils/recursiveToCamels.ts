@@ -1,9 +1,13 @@
 import { snakeToCamel } from './snakeToCamel'
 
-export const recursiveToCamels = <T, U>(data: T): T | U => {
+export const recursiveToCamels = <T, U>(data: T): T | U | T[] | U[] => {
   if (!data || typeof data !== 'object') return data
   if (data instanceof Date || data instanceof RegExp) return data
-  if (Array.isArray(data)) return data
+  if (Array.isArray(data)) {
+    const array: U[] = []
+    data.forEach((d) => array.push(recursiveToCamels(d)))
+    return array
+  }
   const returns: { [key: string]: unknown } = {}
 
   Object.keys(data).forEach((key) => {

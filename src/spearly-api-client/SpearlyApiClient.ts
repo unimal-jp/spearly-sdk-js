@@ -1,6 +1,7 @@
 import fetch from 'node-fetch'
 import { camelToSnake, recursiveToCamels } from '../utils'
-import { List, Content, Form, FormAnswer } from '../types'
+import { mapList, mapContent, mapForm, mapFormAnswer } from '../map'
+import { ServerList, ServerContent, ServerForm, ServerFormAnswer } from '../types'
 
 export type BaseHeaders = {
   Authorization: string
@@ -34,8 +35,9 @@ export class SpearlyApiClient {
     try {
       const response = await fetch(`${this.baseURL}${endpoint}${queries}`, { headers: this.baseHeaders })
       if (!response.ok) throw new Error(`${response.status}`)
+      const data = await response.json()
 
-      return response.json().then((data) => data as T)
+      return recursiveToCamels(data)
     } catch (error) {
       if (error.data) throw error.data
       if (error.response?.data) throw error.response.data
@@ -51,8 +53,9 @@ export class SpearlyApiClient {
         headers: { ...this.baseHeaders, 'Content-Type': 'application/json' },
       })
       if (!response.ok) throw new Error(`${response.status}`)
+      const data = await response.json()
 
-      return response.json().then((data) => data as T)
+      return recursiveToCamels(data)
     } catch (error) {
       if (error.data) throw error.data
       if (error.response?.data) throw error.response.data
@@ -62,33 +65,33 @@ export class SpearlyApiClient {
 
   async getList(contentTypeId: string, params?: GetParams) {
     const queries = this.bindQueriesFromParams(params)
-    const response = await this.getRequest<List>(`/content_types/${contentTypeId}/contents`, queries)
-    return recursiveToCamels<List, List>(response)
+    const response = await this.getRequest<ServerList>(`/content_types/${contentTypeId}/contents`, queries)
+    return mapList(response)
   }
 
   async getContent(contentId: string) {
-    const response = await this.getRequest<Content>(`/contents/${contentId}`)
-    return recursiveToCamels<Content, Content>(response)
+    const response = await this.getRequest<ServerContent>(`/contents/${contentId}`)
+    return mapContent(response)
   }
 
   async getFormLatest(publicUid: string) {
-    const response = await this.getRequest<Form>(`/forms/${publicUid}/latest`)
-    return recursiveToCamels<Form, Form>(response)
+    const response = await this.getRequest<{ form: ServerForm }>(`/forms/${publicUid}/latest`)
+    return mapForm(response.form)
   }
 
-  // eslint-disable-next-line
+  // eslint-disable-next-line camelcase
   async postFormAnswers(formVersionId: number, fields: { [key: string]: unknown } & { _spearly_gotcha: string }) {
     if (!('_spearly_gotcha' in fields)) throw new Error('Include "_spearly_gotcha" in the fields.')
-    // eslint-disable-next-line
+    // eslint-disable-next-line camelcase
     const { _spearly_gotcha, ...paramFields } = fields
 
-    const response = await this.postRequest<FormAnswer>('/form_answers', {
+    const response = await this.postRequest<ServerFormAnswer>('/form_answers', {
       form_version_id: formVersionId,
       fields: paramFields,
       _spearly_gotcha,
     })
 
-    return recursiveToCamels<FormAnswer, FormAnswer>(response)
+    return mapFormAnswer(response)
   }
 
   bindQueriesFromParams(params?: GetParams): string {

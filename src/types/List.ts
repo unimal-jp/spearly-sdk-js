@@ -1,4 +1,4 @@
-import { Content } from './Content'
+import { Content, ServerContent } from './Content'
 
 export type List = {
   name: string
@@ -11,3 +11,7 @@ export type List = {
   next: number
   contents: Content[]
 }
+
+export type ServerList = {
+  contents: ServerContent[]
+} & Omit<List, 'contents'>

@@ -1,6 +1,15 @@
+export type FieldInputType = 'text' | 'number' | 'rich_text' | 'image' | 'calendar' | 'map' | 'content_type' | 'tags'
+
 export type FieldType<T> = {
-  inputType: 'text' | 'number' | 'rich_text' | 'image' | 'calendar' | 'map' | 'content_type' | 'tags'
+  inputType: FieldInputType
   value: T
+}
+
+export type MapValue = {
+  preferredFormat: string
+  address: string
+  latitude: number
+  longitude: number
 }
 
 export type FieldTypeText = FieldType<string>
@@ -11,14 +20,9 @@ export type FieldTypeRichText = FieldType<string>
 
 export type FieldTypeImage = FieldType<string>
 
-export type FieldTypeCalendar = FieldType<string>
+export type FieldTypeCalendar = FieldType<Date>
 
-export type FieldTypeMap = FieldType<{
-  preferredFormat: string
-  address: string
-  latitude: number
-  longitude: number
-}>
+export type FieldTypeMap = FieldType<MapValue>
 
 export type FieldTypeTags = FieldType<string[]>
 
@@ -40,6 +44,18 @@ export type FieldTypeAll =
   | FieldTypeRichText
   | FieldTypeImage
   | FieldTypeCalendar
+  | FieldTypeMap
+  | FieldTypeTags
+  | FieldTypeContentType
+
+export type ServerFieldTypeCalendar = FieldType<string>
+
+export type ServerFieldTypeAll =
+  | FieldTypeText
+  | FieldTypeNumber
+  | FieldTypeRichText
+  | FieldTypeImage
+  | ServerFieldTypeCalendar
   | FieldTypeMap
   | FieldTypeTags
   | FieldTypeContentType
