@@ -5,5 +5,7 @@ export type FormAnswer = {
     ipAddress: string
     userAgent: string
   }
-  createdAt: string
+  createdAt: Date
 }
+
+export type ServerFormAnswer = { createdAt: string } & Omit<FormAnswer, 'createdAt'>
