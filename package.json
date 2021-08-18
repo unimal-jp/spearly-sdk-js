@@ -1,10 +1,10 @@
 {
-  "name": "@unimal-jp/spearly-js-sdk",
+  "name": "@unimal-jp/spearly-sdk-js",
   "version": "0.1.0",
   "description": "",
-  "main": "dist/cjs/spearly-js-sdk.js",
-  "module": "dist/esm/spearly-js-sdk.js",
-  "unpkg": "dist/umd/spearly-js-sdk.js",
+  "main": "dist/cjs/spearly-sdk-js.js",
+  "module": "dist/esm/spearly-sdk-js.js",
+  "unpkg": "dist/umd/spearly-sdk-js.js",
   "types": "dist/cjs/index.d.ts",
   "scripts": {
     "lint": "eslint --ext .ts,.tsx,.vue --ignore-path .eslintignore . || exit 0",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/unimal-jp/spearly-js-sdk.git"
+    "url": "git+https://github.com/unimal-jp/spearly-sdk-js.git"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
@@ -21,12 +21,12 @@
   "author": "",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/unimal-jp/spearly-js-sdk/issues"
+    "url": "https://github.com/unimal-jp/spearly-sdk-js/issues"
   },
   "files": [
     "dist"
   ],
-  "homepage": "https://github.com/unimal-jp/spearly-js-sdk#readme",
+  "homepage": "https://github.com/unimal-jp/spearly-sdk-js#readme",
   "devDependencies": {
     "@nuxt/types": "^2.15.7",
     "@nuxtjs/eslint-config-typescript": "^6.0.1",
