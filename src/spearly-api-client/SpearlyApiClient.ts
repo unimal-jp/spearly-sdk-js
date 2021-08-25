@@ -114,6 +114,6 @@ export class SpearlyApiClient {
       }
     })
 
-    return queries
+    return queries.slice(0, -1)
   }
 }
