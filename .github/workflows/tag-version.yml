@@ -32,9 +32,9 @@ jobs:
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          VERSION=`node -pe "require('./package.json').version"
+          VERSION=`node -pe "require('./package.json').version"`
           git config user.name "${GITHUB_ACTOR}"
-          git config user.email "github-action+${GITHUB_ACTOR}@users.noreply.github.com"
+          git config user.email "github-actions+${GITHUB_ACTOR}@users.noreply.github.com"
           git add .
           git commit -m "update version: ${VERSION}"
           git push https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git feature/add-release-flow
