@@ -2,8 +2,7 @@ name: add version tag
 on:
   push:
     branches:
-      # - main
-      - feature/add-release-flow
+      - main
 
 jobs:
   tag:
@@ -13,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: feature/add-release-flow
+          ref: main
           fetch-depth: 0
       - uses: actions/setup-node@v1
         with:
@@ -37,6 +36,6 @@ jobs:
           git config user.email "github-actions+${GITHUB_ACTOR}@users.noreply.github.com"
           git add .
           git commit -m "update version: ${VERSION}"
-          git push https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git feature/add-release-flow
+          git push https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git main
           git tag v$VERSION
           git push https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git v$VERSION
