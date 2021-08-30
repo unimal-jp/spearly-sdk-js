@@ -6,7 +6,6 @@ const _readJSON = async (name) => {
   const file = (await promisify(fs.readFile)(name)).toString()
   return JSON.parse(file)
 }
-
 const _writeJSON = async (name, json) => {
   const data = JSON.stringify(json, null, 2)
   await promisify(fs.writeFile)(name, data)
@@ -40,7 +39,6 @@ const packages = async (dir = path.resolve(__dirname, '../package.json')) => {
 }
 
 const workspace = () => _readJSON(path.resolve(__dirname, '../package.json'))
-
 const updateWorkspace = (jsonData) => _writeJSON(path.resolve(__dirname, '../package.json'), jsonData)
 
 module.exports = {
