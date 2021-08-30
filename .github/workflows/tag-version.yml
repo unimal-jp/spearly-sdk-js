@@ -16,6 +16,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: feature/add-release-flow
+          fetch-depth: 0
       - uses: actions/cache@v1
         with:
           path: node_modules
@@ -24,9 +27,9 @@ jobs:
       - run: npm i
       - run: ./scripts/version.js PATCH
       - if: "startsWith(github.event.head_commit.message, '[MINOR]')"
-      - run: ./scripts/version.js MINOR
+        run: ./scripts/version.js MINOR
       - if: "startsWith(github.event.head_commit.message, '[MAJOR]')"
-      - run: ./scripts/version.js MAJOR
+        run: ./scripts/version.js MAJOR
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
