@@ -1,13 +1,8 @@
 name: add version tag
 on:
-  # pull_request:
-  #   branches:
-  #     - main
-  #   types:
-  #     - closed
-
   push:
     branches:
+      # - main
       - feature/add-release-flow
 
 jobs:
