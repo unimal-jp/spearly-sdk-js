@@ -1,0 +1,31 @@
+name: publish
+
+on:
+  release:
+    types: [created]
+  
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: main
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ github.event_name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-${{ github.event_name }}-
+      - run: npm i
+      - run: npm run build
+      - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm config set //npm.pkg.github.com/:_authToken=$GITHUB_TOKEN
+          npm publish
