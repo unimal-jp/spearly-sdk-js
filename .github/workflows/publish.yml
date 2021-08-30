@@ -24,6 +24,8 @@ jobs:
           restore-keys: ${{ runner.os }}-node-${{ github.event_name }}-
       - run: npm i
       - run: npm run build
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm config set //npm.pkg.github.com/:_authToken=$GITHUB_TOKEN
+          npm publish
