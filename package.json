@@ -1,6 +1,6 @@
 {
   "name": "@unimal-jp/spearly-sdk-js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "main": "dist/cjs/spearly-sdk-js.js",
   "module": "dist/esm/spearly-sdk-js.js",
