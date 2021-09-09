@@ -12,7 +12,7 @@ export type GetParams = {
   offset?: number
   order?: 'desc' | 'asc'
   orderDirection?: 'desc' | 'asc'
-  orderBy?: 'latest' | 'popular'
+  orderBy?: string
   filterBy?: string
   filterValue?: string
   filterRef?: string
