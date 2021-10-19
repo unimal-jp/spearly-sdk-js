@@ -17,6 +17,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '12.x'
+          registry-url: 'https://registry.npmjs.org'
       - uses: actions/cache@v1
         with:
           path: node_modules
@@ -24,8 +25,6 @@ jobs:
           restore-keys: ${{ runner.os }}-node-${{ github.event_name }}-
       - run: npm i
       - run: npm run build
-      - env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          npm config set //npm.pkg.github.com/:_authToken=$GITHUB_TOKEN
-          npm publish
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

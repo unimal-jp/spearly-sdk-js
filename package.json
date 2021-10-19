@@ -1,5 +1,5 @@
 {
-  "name": "@unimal-jp/spearly-sdk-js",
+  "name": "@spearly/sdk-js",
   "version": "0.1.5",
   "description": "",
   "main": "dist/cjs/spearly-sdk-js.js",
@@ -17,7 +17,7 @@
     "url": "git+https://github.com/unimal-jp/spearly-sdk-js.git"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
+    "registry": "https://registry.npmjs.org/"
   },
   "author": "",
   "license": "UNLICENSED",
