@@ -1,4 +1,4 @@
-# spearly-sdk-js
+# @spearly/sdk-js
 
 [![Spec Test](https://github.com/unimal-jp/spearly-sdk-js/actions/workflows/spec.yml/badge.svg)](https://github.com/unimal-jp/spearly-sdk-js/actions/workflows/spec.yml)
 
@@ -10,10 +10,10 @@ It is a Development Kit that makes it easy to use Spearly CMS from JavaScript or
 
 ```
 // npm
-$ npm install -S @unimal-jp/spearly-sdk-js
+$ npm install -S @spearly/sdk-js
 
 // yarn
-$ yarn add @unimal-jp/spearly-sdk-js
+$ yarn add @spearly/sdk-js
 ```
 
 ## Usage
@@ -21,7 +21,7 @@ $ yarn add @unimal-jp/spearly-sdk-js
 ### Setup
 
 ```js
-import { SpearlyApiClient } from '@unimal-jp/spearly-sdk-js'
+import { SpearlyApiClient } from '@spearly/sdk-js'
 
 const apiClient = new SpearlyApiClient(SPEARLY_DOMAIN, API_VERSION, API_KEY)
 ```
