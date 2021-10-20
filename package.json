@@ -2,9 +2,9 @@
   "name": "@spearly/sdk-js",
   "version": "0.1.7",
   "description": "",
-  "main": "dist/cjs/spearly-sdk-js.js",
-  "module": "dist/esm/spearly-sdk-js.js",
-  "unpkg": "dist/umd/spearly-sdk-js.js",
+  "main": "dist/cjs/sdk-js.js",
+  "module": "dist/esm/sdk-js.js",
+  "unpkg": "dist/umd/sdk-js.js",
   "types": "dist/cjs/index.d.ts",
   "scripts": {
     "lint": "eslint --ext .ts,.tsx,.vue --ignore-path .eslintignore . || exit 0",
