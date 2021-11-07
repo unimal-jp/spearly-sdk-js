@@ -74,6 +74,11 @@ export class SpearlyApiClient {
     return mapContent(response)
   }
 
+  async getContentPreview(contentId: string, previewToken: string) {
+    const response = await this.getRequest<ServerContent>(`/contents/${contentId}`, `?preview_token=${previewToken}`)
+    return mapContent(response)
+  }
+
   async getFormLatest(publicUid: string) {
     const response = await this.getRequest<{ form: ServerForm }>(`/forms/${publicUid}/latest`)
     return mapForm(response.form)
