@@ -1,4 +1,4 @@
-import fetch from 'node-fetch'
+import axios, { AxiosInstance } from 'axios'
 import { camelToSnake, recursiveToCamels } from '../utils'
 import { mapList, mapContent, mapForm, mapFormAnswer } from '../map'
 import { ServerList, ServerContent, ServerForm, ServerFormAnswer } from '../types'
@@ -21,24 +21,22 @@ export type GetParams = {
 }
 
 export class SpearlyApiClient {
-  baseURL: string
-  baseHeaders: BaseHeaders = {
-    Authorization: '',
-  }
+  client: AxiosInstance
 
   constructor(domain: string, version: string, apiKey: string) {
-    this.baseURL = `https://${domain}/api/${version}`
-    this.baseHeaders.Authorization = `Bearer ${apiKey}`
+    this.client = axios.create({
+      baseURL: `https://${domain}/api/${version}`,
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+      },
+    })
   }
 
   async getRequest<T>(endpoint: string, queries = ''): Promise<T> {
     try {
-      const response = await fetch(`${this.baseURL}${endpoint}${queries}`, { headers: this.baseHeaders })
-      if (!response.ok) throw new Error(`${response.status}`)
-      const data = await response.json()
-
-      return recursiveToCamels(data)
-    } catch (error) {
+      const response = await this.client.get(`${endpoint}${queries}`)
+      return recursiveToCamels(response.data)
+    } catch (error: any) {
       if (error.data) throw error.data
       if (error.response?.data) throw error.response.data
       return Promise.reject(new Error(error))
@@ -47,16 +45,11 @@ export class SpearlyApiClient {
 
   async postRequest<T>(endpoint: string, params: { [key: string]: unknown }): Promise<T> {
     try {
-      const response = await fetch(`${this.baseURL}${endpoint}`, {
-        method: 'POST',
-        body: JSON.stringify(params),
-        headers: { ...this.baseHeaders, 'Content-Type': 'application/json' },
+      const response = await this.client.post(endpoint, {
+        body: params,
       })
-      if (!response.ok) throw new Error(`${response.status}`)
-      const data = await response.json()
-
-      return recursiveToCamels(data)
-    } catch (error) {
+      return recursiveToCamels(response.data)
+    } catch (error: any) {
       if (error.data) throw error.data
       if (error.response?.data) throw error.response.data
       return Promise.reject(new Error(error))
