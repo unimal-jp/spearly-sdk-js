@@ -1,4 +1,4 @@
-export type FormField = {
+export type SpearlyFormField = {
   identifier: string
   name: string
   description: string

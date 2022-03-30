@@ -1,7 +1,7 @@
-import { Content, ServerContent, FieldTypeAll } from '../types'
+import { SpearlyContent, ServerSpearlyContent, SpearlyFieldTypeAll } from '../types'
 
-export const mapContent = (content: ServerContent): Content => {
-  const fields: { [key: string]: FieldTypeAll } = {}
+export const mapSpearlyContent = (content: ServerSpearlyContent): SpearlyContent => {
+  const fields: { [key: string]: SpearlyFieldTypeAll } = {}
   Object.keys(content.fields).forEach((name) => {
     if (content.fields[name].inputType !== 'calendar') {
       fields[name] = content.fields[name]
