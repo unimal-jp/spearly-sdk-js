@@ -23,3 +23,16 @@ jobs:
           key: ${{ runner.os }}-node-${{ github.event_name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: ${{ runner.os }}-node-${{ github.event_name }}-
       - run: npm i
+      - run: ./scripts/next-version.js
+      - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=`node -pe "require('./package.json').version"`
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "github-actions+${GITHUB_ACTOR}@users.noreply.github.com"
+          git switch next-version
+          git add .
+          git commit -m "update version: ${VERSION}"
+          git push https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git next-version
+          git tag v$VERSION
+          git push https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git v$VERSION
