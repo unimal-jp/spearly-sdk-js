@@ -66,7 +66,7 @@ async function() {
 
 Type definitions are also included, so there is no need to add anything else.
 
-- `GetParams` : This is options that can be set when retrieving the ContentList.
-- `List` : The type of the content list returned by the API.
-- `Content` : The type of content returned by the API.
-- `Form` : The type of form returned by the API.
+- `SpearlyGetParams` : This is options that can be set when retrieving the ContentList.
+- `SpearlyList` : The type of the content list returned by the API.
+- `SpearlyContent` : The type of content returned by the API.
+- `SpearlyForm` : The type of form returned by the API.
