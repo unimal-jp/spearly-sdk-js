@@ -7,7 +7,7 @@ export type BaseHeaders = {
   Authorization: string
 }
 
-export type GetParams = {
+export type SpearlyGetParams = {
   limit?: number
   offset?: number
   order?: 'desc' | 'asc'
@@ -50,7 +50,7 @@ export class SpearlyApiClient {
     }
   }
 
-  async getList(contentTypeId: string, params?: GetParams) {
+  async getList(contentTypeId: string, params?: SpearlyGetParams) {
     const queries = this.bindQueriesFromParams(params)
     const response = await this.getRequest<ServerSpearlyList>(`/content_types/${contentTypeId}/contents`, queries)
     return mapSpearlyList(response)
@@ -89,12 +89,12 @@ export class SpearlyApiClient {
     return mapSpearlyFormAnswer(response.answer)
   }
 
-  bindQueriesFromParams(params?: GetParams): string {
+  bindQueriesFromParams(params?: SpearlyGetParams): string {
     if (!params) return ''
     let queries = '?'
 
     Object.keys(params).forEach((param) => {
-      const paramName = param as keyof GetParams
+      const paramName = param as keyof SpearlyGetParams
       const snakeName = camelToSnake(paramName)
 
       if (typeof params[paramName] === 'number') {
