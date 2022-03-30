@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios'
 import { camelToSnake, recursiveToCamels } from '../utils'
-import { mapList, mapContent, mapForm, mapFormAnswer } from '../map'
-import { ServerList, ServerContent, ServerForm, ServerFormAnswer } from '../types'
+import { mapSpearlyList, mapSpearlyContent, mapSpearlyForm, mapSpearlyFormAnswer } from '../map'
+import { ServerSpearlyList, ServerSpearlyContent, ServerSpearlyForm, ServerSpearlyFormAnswer } from '../types'
 
 export type BaseHeaders = {
   Authorization: string
@@ -52,23 +52,26 @@ export class SpearlyApiClient {
 
   async getList(contentTypeId: string, params?: GetParams) {
     const queries = this.bindQueriesFromParams(params)
-    const response = await this.getRequest<ServerList>(`/content_types/${contentTypeId}/contents`, queries)
-    return mapList(response)
+    const response = await this.getRequest<ServerSpearlyList>(`/content_types/${contentTypeId}/contents`, queries)
+    return mapSpearlyList(response)
   }
 
   async getContent(contentId: string) {
-    const response = await this.getRequest<ServerContent>(`/contents/${contentId}`)
-    return mapContent(response)
+    const response = await this.getRequest<ServerSpearlyContent>(`/contents/${contentId}`)
+    return mapSpearlyContent(response)
   }
 
   async getContentPreview(contentId: string, previewToken: string) {
-    const response = await this.getRequest<ServerContent>(`/contents/${contentId}`, `?preview_token=${previewToken}`)
-    return mapContent(response)
+    const response = await this.getRequest<ServerSpearlyContent>(
+      `/contents/${contentId}`,
+      `?preview_token=${previewToken}`
+    )
+    return mapSpearlyContent(response)
   }
 
   async getFormLatest(publicUid: string) {
-    const response = await this.getRequest<{ form: ServerForm }>(`/forms/${publicUid}/latest`)
-    return mapForm(response.form)
+    const response = await this.getRequest<{ form: ServerSpearlyForm }>(`/forms/${publicUid}/latest`)
+    return mapSpearlyForm(response.form)
   }
 
   // eslint-disable-next-line camelcase
@@ -77,13 +80,13 @@ export class SpearlyApiClient {
     // eslint-disable-next-line camelcase
     const { _spearly_gotcha, ...paramFields } = fields
 
-    const response = await this.postRequest<ServerFormAnswer>('/form_answers', {
+    const response = await this.postRequest<ServerSpearlyFormAnswer>('/form_answers', {
       form_version_id: formVersionId,
       fields: paramFields,
       _spearly_gotcha,
     })
 
-    return mapFormAnswer(response)
+    return mapSpearlyFormAnswer(response)
   }
 
   bindQueriesFromParams(params?: GetParams): string {

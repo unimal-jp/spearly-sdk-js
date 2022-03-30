@@ -1,21 +1,21 @@
-import { FormField } from './FormField'
+import { SpearlyFormField } from './SpearlyFormField'
 
-export type Form = {
+export type SpearlyForm = {
   id: number
   publicUid: string
   identifier: string
   name: string
   description: string
   thankYouMessage: string
-  fields: FormField[]
+  fields: SpearlyFormField[]
   callbackUrl: string
   startedAt: Date | null
   endedAt: Date | null
   createdAt: Date
 }
 
-export type ServerForm = {
+export type ServerSpearlyForm = {
   startedAt: string | null
   endedAt: string | null
   createdAt: string
-} & Omit<Form, 'startedAt' | 'endedAt' | 'createdAt'>
+} & Omit<SpearlyForm, 'startedAt' | 'endedAt' | 'createdAt'>

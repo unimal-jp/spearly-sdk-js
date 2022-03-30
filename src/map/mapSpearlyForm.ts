@@ -1,6 +1,6 @@
-import { Form, ServerForm } from '../types'
+import { SpearlyForm, ServerSpearlyForm } from '../types'
 
-export const mapForm = (form: ServerForm): Form => {
+export const mapSpearlyForm = (form: ServerSpearlyForm): SpearlyForm => {
   return {
     ...form,
     startedAt: form.startedAt ? new Date(form.startedAt) : null,
