@@ -80,13 +80,13 @@ export class SpearlyApiClient {
     // eslint-disable-next-line camelcase
     const { _spearly_gotcha, ...paramFields } = fields
 
-    const response = await this.postRequest<ServerSpearlyFormAnswer>('/form_answers', {
+    const response = await this.postRequest<{ answer: ServerSpearlyFormAnswer }>('/form_answers', {
       form_version_id: formVersionId,
       fields: paramFields,
       _spearly_gotcha,
     })
 
-    return mapSpearlyFormAnswer(response)
+    return mapSpearlyFormAnswer(response.answer)
   }
 
   bindQueriesFromParams(params?: GetParams): string {
