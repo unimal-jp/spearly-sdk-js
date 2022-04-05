@@ -4,6 +4,7 @@ import { mapList, mapContent, mapForm, mapFormAnswer } from '../map'
 import { ServerList, ServerContent, ServerForm, ServerFormAnswer } from '../types'
 
 export type BaseHeaders = {
+  Accept: string
   Authorization: string
 }
 
@@ -23,11 +24,13 @@ export type GetParams = {
 export class SpearlyApiClient {
   baseURL: string
   baseHeaders: BaseHeaders = {
+    Accept: '',
     Authorization: '',
   }
 
-  constructor(domain: string, version: string, apiKey: string) {
-    this.baseURL = `https://${domain}/api/${version}`
+  constructor(domain: string, apiKey: string) {
+    this.baseURL = `https://${domain}`
+    this.baseHeaders.Accept = 'application/vnd.spearly.v2+json'
     this.baseHeaders.Authorization = `Bearer ${apiKey}`
   }
 
@@ -38,7 +41,7 @@ export class SpearlyApiClient {
       const data = await response.json()
 
       return recursiveToCamels(data)
-    } catch (error) {
+    } catch (error: any) {
       if (error.data) throw error.data
       if (error.response?.data) throw error.response.data
       return Promise.reject(new Error(error))
@@ -56,7 +59,7 @@ export class SpearlyApiClient {
       const data = await response.json()
 
       return recursiveToCamels(data)
-    } catch (error) {
+    } catch (error: any) {
       if (error.data) throw error.data
       if (error.response?.data) throw error.response.data
       return Promise.reject(new Error(error))
@@ -70,13 +73,16 @@ export class SpearlyApiClient {
   }
 
   async getContent(contentId: string) {
-    const response = await this.getRequest<ServerContent>(`/contents/${contentId}`)
-    return mapContent(response)
+    const response = await this.getRequest<{ data: ServerContent }>(`/contents/${contentId}`)
+    return mapContent(response.data)
   }
 
   async getContentPreview(contentId: string, previewToken: string) {
-    const response = await this.getRequest<ServerContent>(`/contents/${contentId}`, `?preview_token=${previewToken}`)
-    return mapContent(response)
+    const response = await this.getRequest<{ data: ServerContent }>(
+      `/contents/${contentId}`,
+      `?preview_token=${previewToken}`
+    )
+    return mapContent(response.data)
   }
 
   async getFormLatest(publicUid: string) {
@@ -90,13 +96,13 @@ export class SpearlyApiClient {
     // eslint-disable-next-line camelcase
     const { _spearly_gotcha, ...paramFields } = fields
 
-    const response = await this.postRequest<ServerFormAnswer>('/form_answers', {
+    const response = await this.postRequest<{ answer: ServerFormAnswer }>('/form_answers', {
       form_version_id: formVersionId,
       fields: paramFields,
       _spearly_gotcha,
     })
 
-    return mapFormAnswer(response)
+    return mapFormAnswer(response.answer)
   }
 
   bindQueriesFromParams(params?: GetParams): string {
