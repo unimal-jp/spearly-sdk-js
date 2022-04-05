@@ -1,21 +1,29 @@
-import { FieldTypeAll, ServerFieldTypeAll } from './FieldType'
+import { FieldTypeAll } from './'
 
 export type Content = {
-  publicUid: string
-  createdAt: Date
-  updatedAt: Date
-  publishedAt: Date
-  contentAlias: string
-  fields: {
-    [key: string]: FieldTypeAll
+  attributes: {
+    contentAlias: string
+    createdAt: Date
+    fields: {
+      data: FieldTypeAll[]
+    }
+    nextContent: Content | null
+    previousContent: Content | null
+    publicUid: string
+    publishedAt: Date
+    updatedAt: Date
+  }
+  id: string
+  type: 'content'
+  values: {
+    [key: string]: unknown
   }
 }
 
 export type ServerContent = {
-  fields: {
-    [key: string]: ServerFieldTypeAll
-  }
-  createdAt: string
-  updatedAt: string
-  publishedAt: string
-} & Omit<Content, 'fields' | 'createdAt' | 'updatedAt' | 'publishedAt'>
+  attributes: {
+    createdAt: string
+    publishedAt: string
+    updatedAt: string
+  } & Omit<Content['attributes'], 'createdAt' | 'publishedAt' | 'updatedAt'>
+} & Omit<Content, 'attributes'>

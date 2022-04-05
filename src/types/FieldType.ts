@@ -1,8 +1,13 @@
 export type FieldInputType = 'text' | 'number' | 'rich_text' | 'image' | 'calendar' | 'map' | 'content_type' | 'tags'
 
 export type FieldType<T> = {
-  inputType: FieldInputType
-  value: T
+  id: string
+  type: 'field'
+  attributes: {
+    identifier: string
+    inputType: FieldInputType
+    value: T
+  }
 }
 
 export type MapValue = {

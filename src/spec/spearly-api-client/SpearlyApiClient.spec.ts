@@ -1,63 +1,89 @@
 import { SpearlyApiClient } from '../../spearly-api-client'
 
 const serverContent = {
-  publicUid: 'content_1',
-  createdAt: '2021-08-01 00:00:00',
-  updatedAt: '2021-08-01 00:00:00',
-  publishedAt: '2021-08-01 00:00:00',
-  contentAlias: 'content_1',
-  fields: {
-    title: {
-      inputType: 'text',
-      value: 'title',
+  attributes: {
+    contentAlias: 'content_1',
+    createdAt: '2021-08-01 00:00:00',
+    fields: {
+      data: [
+        {
+          attributes: {
+            identifier: 'title',
+            inputType: 'text',
+            value: 'title',
+          },
+          id: '1',
+          type: 'field',
+        },
+        {
+          attributes: {
+            identifier: 'description',
+            inputType: 'text',
+            value: 'description',
+          },
+        },
+      ],
     },
-    descritpion: {
-      inputType: 'text',
-      value: 'description',
-    },
+    publicUid: 'content_1',
+    publishedAt: '2021-08-01 00:00:00',
+    updatedAt: '2021-08-01 00:00:00',
+  },
+  values: {
+    title: 'title',
+    descritpion: 'description',
   },
 } as const
 
 const serverList = {
-  name: 'test',
-  identifier: 'test',
-  publicUid: 'test_id',
   totalContentsCount: 50,
   matchingContentsCount: 10,
   limit: 10,
   offset: 0,
   next: 11,
-  contents: [serverContent],
+  data: [serverContent],
 } as const
 
 const content = {
-  publicUid: 'content_1',
-  createdAt: new Date('2021-08-01 00:00:00'),
-  updatedAt: new Date('2021-08-01 00:00:00'),
-  publishedAt: new Date('2021-08-01 00:00:00'),
-  contentAlias: 'content_1',
-  fields: {
-    title: {
-      inputType: 'text',
-      value: 'title',
+  attributes: {
+    contentAlias: 'content_1',
+    createdAt: new Date('2021-08-01 00:00:00'),
+    fields: {
+      data: [
+        {
+          attributes: {
+            identifier: 'title',
+            inputType: 'text',
+            value: 'title',
+          },
+          id: '1',
+          type: 'field',
+        },
+        {
+          attributes: {
+            identifier: 'description',
+            inputType: 'text',
+            value: 'description',
+          },
+        },
+      ],
     },
-    descritpion: {
-      inputType: 'text',
-      value: 'description',
-    },
+    publicUid: 'content_1',
+    publishedAt: new Date('2021-08-01 00:00:00'),
+    updatedAt: new Date('2021-08-01 00:00:00'),
+  },
+  values: {
+    title: 'title',
+    descritpion: 'description',
   },
 } as const
 
 const list = {
-  name: 'test',
-  identifier: 'test',
-  publicUid: 'test_id',
   totalContentsCount: 50,
   matchingContentsCount: 10,
   limit: 10,
   offset: 0,
   next: 11,
-  contents: [content],
+  data: [content],
 } as const
 
 const serverLatestForm = {
@@ -132,7 +158,7 @@ describe('SpearlyApiClient', () => {
   let apiClient: SpearlyApiClient
 
   beforeEach(() => {
-    apiClient = new SpearlyApiClient('spearly.com', 'v1', 'API_KEY')
+    apiClient = new SpearlyApiClient('papi.spearly.app', 'API_KEY')
   })
 
   describe('APIへのアクセスポイント', () => {
@@ -163,7 +189,7 @@ describe('SpearlyApiClient', () => {
       it('APIレスポンスが正常系であればContentにマッピングされたデータが取得することができる', async () => {
         spyRequest = jest
           .spyOn(SpearlyApiClient.prototype, 'getRequest')
-          .mockReturnValue(Promise.resolve(serverContent))
+          .mockReturnValue(Promise.resolve({ data: serverContent }))
 
         const res = await apiClient.getContent('content_id')
         expect(spyRequest).toHaveBeenCalledWith('/contents/content_id')
@@ -187,7 +213,7 @@ describe('SpearlyApiClient', () => {
       beforeEach(() => {
         spyRequest = jest
           .spyOn(SpearlyApiClient.prototype, 'postRequest')
-          .mockReturnValue(Promise.resolve(serverFormAnswer))
+          .mockReturnValue(Promise.resolve({ answer: serverFormAnswer }))
       })
 
       it('APIレスポンスが正常系であればFormAnswerにマッピングされたデータが取得することができる', async () => {
