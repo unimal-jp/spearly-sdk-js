@@ -4,6 +4,7 @@ import { mapSpearlyList, mapSpearlyContent, mapSpearlyForm, mapSpearlyFormAnswer
 import { ServerSpearlyList, ServerSpearlyContent, ServerSpearlyForm, ServerSpearlyFormAnswer } from '../types'
 
 export type BaseHeaders = {
+  Accept: string
   Authorization: string
 }
 
@@ -23,10 +24,11 @@ export type GetParams = {
 export class SpearlyApiClient {
   client: AxiosInstance
 
-  constructor(domain: string, version: string, apiKey: string) {
+  constructor(domain: string, apiKey: string) {
     this.client = axios.create({
-      baseURL: `https://${domain}/api/${version}`,
+      baseURL: `https://${domain}`,
       headers: {
+        Accept: 'application/vnd.spearly.v2+json',
         Authorization: `Bearer ${apiKey}`,
       },
     })
@@ -57,16 +59,16 @@ export class SpearlyApiClient {
   }
 
   async getContent(contentId: string) {
-    const response = await this.getRequest<ServerSpearlyContent>(`/contents/${contentId}`)
-    return mapSpearlyContent(response)
+    const response = await this.getRequest<{ data: ServerSpearlyContent }>(`/contents/${contentId}`)
+    return mapSpearlyContent(response.data)
   }
 
   async getContentPreview(contentId: string, previewToken: string) {
-    const response = await this.getRequest<ServerSpearlyContent>(
+    const response = await this.getRequest<{ data: ServerSpearlyContent }>(
       `/contents/${contentId}`,
       `?preview_token=${previewToken}`
     )
-    return mapSpearlyContent(response)
+    return mapSpearlyContent(response.data)
   }
 
   async getFormLatest(publicUid: string) {

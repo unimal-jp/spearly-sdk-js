@@ -1,21 +1,29 @@
-import { SpearlyFieldTypeAll, ServerSpearlyFieldTypeAll } from './SpearlyFieldType'
+import { SpearlyFieldTypeAll } from './SpearlyFieldType'
 
 export type SpearlyContent = {
-  publicUid: string
-  createdAt: Date
-  updatedAt: Date
-  publishedAt: Date
-  contentAlias: string
-  fields: {
-    [key: string]: SpearlyFieldTypeAll
+  attributes: {
+    contentAlias: string
+    createdAt: Date
+    fields: {
+      data: SpearlyFieldTypeAll[]
+    }
+    nextContent: SpearlyContent | null
+    previousContent: SpearlyContent | null
+    publicUid: string
+    publishedAt: Date
+    updatedAt: Date
+  }
+  id: string
+  type: 'content'
+  values: {
+    [key: string]: unknown
   }
 }
 
 export type ServerSpearlyContent = {
-  fields: {
-    [key: string]: ServerSpearlyFieldTypeAll
-  }
-  createdAt: string
-  updatedAt: string
-  publishedAt: string
-} & Omit<SpearlyContent, 'fields' | 'createdAt' | 'updatedAt' | 'publishedAt'>
+  attributes: {
+    createdAt: string
+    publishedAt: string
+    updatedAt: string
+  } & Omit<SpearlyContent['attributes'], 'createdAt' | 'publishedAt' | 'updatedAt'>
+} & Omit<SpearlyContent, 'attributes'>

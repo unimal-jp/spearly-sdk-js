@@ -1,16 +1,13 @@
-export type SpearlyFieldInputType =
-  | 'text'
-  | 'number'
-  | 'rich_text'
-  | 'image'
-  | 'calendar'
-  | 'map'
-  | 'content_type'
-  | 'tags'
+export type SpearlyFieldInputType = 'text' | 'number' | 'rich_text' | 'image' | 'calendar' | 'map' | 'content_type' | 'tags'
 
 export type SpearlyFieldType<T> = {
-  inputType: SpearlyFieldInputType
-  value: T
+  id: string
+  type: 'field'
+  attributes: {
+    identifier: string
+    inputType: SpearlyFieldInputType
+    value: T
+  }
 }
 
 export type MapValue = {

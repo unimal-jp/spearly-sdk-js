@@ -1,23 +1,28 @@
-import { SpearlyContent, ServerSpearlyContent, SpearlyFieldTypeAll } from '../types'
+import { SpearlyContent, ServerSpearlyContent } from '../types'
 
 export const mapSpearlyContent = (content: ServerSpearlyContent): SpearlyContent => {
-  const fields: { [key: string]: SpearlyFieldTypeAll } = {}
-  Object.keys(content.fields).forEach((name) => {
-    if (content.fields[name].inputType !== 'calendar') {
-      fields[name] = content.fields[name]
-      return
-    }
-    fields[name] = {
-      inputType: 'calendar',
-      value: new Date(content.fields[name].value as string),
+  const values = content.values
+  const fields = content.attributes.fields.data.map((field) => {
+    if (field.attributes.inputType !== 'calendar') return field
+    const date = new Date(field.attributes.value as string)
+    values[field.attributes.identifier] = date
+    return {
+      ...field,
+      value: date,
     }
   })
 
   return {
     ...content,
-    fields,
-    createdAt: new Date(content.createdAt),
-    updatedAt: new Date(content.updatedAt),
-    publishedAt: new Date(content.publishedAt),
+    values,
+    attributes: {
+      ...content.attributes,
+      fields: {
+        data: fields,
+      },
+      createdAt: new Date(content.attributes.createdAt),
+      updatedAt: new Date(content.attributes.updatedAt),
+      publishedAt: new Date(content.attributes.publishedAt),
+    },
   }
 }

@@ -1,17 +1,17 @@
 import { SpearlyFormField } from './SpearlyFormField'
 
 export type SpearlyForm = {
+  callbackUrl: string
+  createdAt: Date
+  description: string
+  endedAt: Date | null
+  fields: SpearlyFormField[]
   id: number
-  publicUid: string
   identifier: string
   name: string
-  description: string
-  thankYouMessage: string
-  fields: SpearlyFormField[]
-  callbackUrl: string
+  publicUid: string
   startedAt: Date | null
-  endedAt: Date | null
-  createdAt: Date
+  thankYouMessage: string
 }
 
 export type ServerSpearlyForm = {
