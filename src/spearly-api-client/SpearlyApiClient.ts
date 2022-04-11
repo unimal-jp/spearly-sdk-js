@@ -1,24 +1,17 @@
 import axios, { AxiosInstance } from 'axios'
-import { camelToSnake, recursiveToCamels } from '../utils'
+import { recursiveToCamels, bindQueriesFromParams } from '../utils'
 import { mapSpearlyList, mapSpearlyContent, mapSpearlyForm, mapSpearlyFormAnswer } from '../map'
-import { ServerSpearlyList, ServerSpearlyContent, ServerSpearlyForm, ServerSpearlyFormAnswer } from '../types'
+import {
+  ServerSpearlyList,
+  ServerSpearlyContent,
+  ServerSpearlyForm,
+  ServerSpearlyFormAnswer,
+  SpearlyGetParams,
+} from '../types'
 
 export type BaseHeaders = {
   Accept: string
   Authorization: string
-}
-
-export type GetParams = {
-  limit?: number
-  offset?: number
-  order?: 'desc' | 'asc'
-  orderDirection?: 'desc' | 'asc'
-  orderBy?: string
-  filterBy?: string
-  filterValue?: string
-  filterRef?: string
-  rangeFrom?: Date
-  rangeTo?: Date
 }
 
 export class SpearlyApiClient {
@@ -52,8 +45,8 @@ export class SpearlyApiClient {
     }
   }
 
-  async getList(contentTypeId: string, params?: GetParams) {
-    const queries = this.bindQueriesFromParams(params)
+  async getList(contentTypeId: string, params?: SpearlyGetParams) {
+    const queries = bindQueriesFromParams(params)
     const response = await this.getRequest<ServerSpearlyList>(`/content_types/${contentTypeId}/contents`, queries)
     return mapSpearlyList(response)
   }
@@ -89,28 +82,5 @@ export class SpearlyApiClient {
     })
 
     return mapSpearlyFormAnswer(response.answer)
-  }
-
-  bindQueriesFromParams(params?: GetParams): string {
-    if (!params) return ''
-    let queries = '?'
-
-    Object.keys(params).forEach((param) => {
-      const paramName = param as keyof GetParams
-      const snakeName = camelToSnake(paramName)
-
-      if (typeof params[paramName] === 'number') {
-        queries += `${snakeName}=${String(params[paramName])}&`
-      } else if (params[paramName] instanceof Date) {
-        const year = (params[paramName] as Date).getFullYear()
-        const month = String((params[paramName] as Date).getMonth() + 1)
-        const date = String((params[paramName] as Date).getDate())
-        queries += `${snakeName}=${year}-${month.padStart(2, '0')}-${date.padStart(2, '0')}&`
-      } else {
-        queries += `${snakeName}=${params[paramName]}&`
-      }
-    })
-
-    return queries.slice(0, -1)
   }
 }
