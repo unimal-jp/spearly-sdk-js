@@ -1,9 +1,8 @@
 name: Spec Test
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    types: [opened]
 
 jobs:
   spec:
@@ -15,7 +14,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
+          node-version: '14.x'
       - uses: actions/cache@v1
         with:
           path: node_modules
