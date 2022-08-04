@@ -1,10 +1,12 @@
+import { FormInputType } from './FormInputType'
+
 export type FormField = {
   data?: {
     options: string[]
   }
   description: string
   identifier: string
-  inputType: 'text' | 'radio' | 'checkbox' | 'text_area'
+  inputType: FormInputType
   name: string
   order: number
   required: boolean
