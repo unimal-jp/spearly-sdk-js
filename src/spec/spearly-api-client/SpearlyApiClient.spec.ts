@@ -30,7 +30,7 @@ const serverContent = {
   },
   values: {
     title: 'title',
-    descritpion: 'description',
+    description: 'description',
   },
 } as const
 
@@ -73,7 +73,7 @@ const content = {
   },
   values: {
     title: 'title',
-    descritpion: 'description',
+    description: 'description',
   },
 } as const
 
@@ -182,6 +182,30 @@ describe('SpearlyApiClient', () => {
       it('paramsを指定している場合は送信可能なクエリでリクエストする', () => {
         apiClient.getList('content_type_id', { limit: 5, offset: 6 })
         expect(spyRequest).toHaveBeenCalledWith('/content_types/content_type_id/contents', '?limit=5&offset=6')
+      })
+
+      it('paramsのordersが正しいクエリでリクエストする', () => {
+        apiClient.getList('content_type_id', { orders: { foo: 'asc', bar: 'desc' } })
+        expect(spyRequest).toHaveBeenCalledWith(
+          '/content_types/content_type_id/contents',
+          '?order_by_foo=asc&order_by_bar=desc'
+        )
+      })
+
+      it('paramsのfilter_valueが配列の場合も正しいクエリでリクエストする', () => {
+        apiClient.getList('content_type_id', { filterValue: ['foo', 'bar'] })
+        expect(spyRequest).toHaveBeenCalledWith(
+          '/content_types/content_type_id/contents',
+          '?filter_value[]=foo&filter_value[]=bar'
+        )
+      })
+
+      it('paramsにfiltersが正しいクエリでリクエストできる', () => {
+        apiClient.getList('content_type_id', { filters: { blog: ['foo', 'bar'], news: 'test' } })
+        expect(spyRequest).toHaveBeenCalledWith(
+          '/content_types/content_type_id/contents',
+          '?filter_by_blog[]=foo&filter_by_blog[]=bar&filter_by_news=test'
+        )
       })
     })
 
