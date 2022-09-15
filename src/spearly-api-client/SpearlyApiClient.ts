@@ -14,9 +14,16 @@ export type GetParams = {
   order?: 'desc' | 'asc'
   orderDirection?: 'desc' | 'asc'
   orderBy?: string
+  orders?: {
+    [key: string]: 'desc' | 'asc'
+  }
   filterBy?: string
-  filterValue?: string
+  filterValue?: string | string[]
   filterRef?: string
+  filters?: {
+    [key: string]: string | string[]
+  }
+  filterMode?: 'or' | 'and'
   rangeFrom?: Date
   rangeTo?: Date
 }
@@ -120,6 +127,28 @@ export class SpearlyApiClient {
         const month = String((params[paramName] as Date).getMonth() + 1)
         const date = String((params[paramName] as Date).getDate())
         queries += `${snakeName}=${year}-${month.padStart(2, '0')}-${date.padStart(2, '0')}&`
+      } else if (paramName === 'orders') {
+        const orders = params[paramName]!
+        Object.keys(orders).forEach((key) => {
+          queries += `order_by_${key}=${orders[key]}&`
+        })
+      } else if (paramName === 'filterValue' && params[paramName] && params[paramName] instanceof Array) {
+        const param = params[paramName] as string[]
+        param.forEach((v) => {
+          queries += `filter_value[]=${v}&`
+        })
+      } else if (paramName === 'filters') {
+        const group = params[paramName]!
+
+        Object.keys(group).forEach((fieldId) => {
+          if (group[fieldId] instanceof Array) {
+            ;(group[fieldId] as string[]).forEach((v) => {
+              queries += `filter_by_${fieldId}[]=${v}&`
+            })
+          } else {
+            queries += `filter_by_${fieldId}=${group[fieldId]}&`
+          }
+        })
       } else {
         queries += `${snakeName}=${params[paramName]}&`
       }
