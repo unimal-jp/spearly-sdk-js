@@ -23,7 +23,15 @@ $ yarn add @spearly/sdk-js
 ```js
 import { SpearlyApiClient } from '@spearly/sdk-js'
 
-const apiClient = new SpearlyApiClient(SPEARLY_DOMAIN, API_KEY)
+const apiClient = new SpearlyApiClient(API_KEY)
+```
+
+You can specify the API Server as well using by optional.
+
+```js
+import { SpearlyApiClient } from '@spearly/sdk-js'
+
+const apiClient = new SpearlyApiClient(API_KEY, API_SERVER_DOMAIN)
 ```
 
 ### Get Content Lists

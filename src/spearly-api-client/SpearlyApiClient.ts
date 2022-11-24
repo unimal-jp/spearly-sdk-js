@@ -3,6 +3,8 @@ import { camelToSnake, recursiveToCamels } from '../utils'
 import { mapList, mapContent, mapForm, mapFormAnswer } from '../map'
 import { ServerList, ServerContent, ServerForm, ServerFormAnswer } from '../types'
 
+const BASE_URL_FALLBACK = 'api.spearly.com'
+
 export type BaseHeaders = {
   Accept: string
   Authorization: string
@@ -35,8 +37,8 @@ export class SpearlyApiClient {
     Authorization: '',
   }
 
-  constructor(domain: string, apiKey: string) {
-    this.baseURL = `https://${domain}`
+  constructor(apiKey: string, domain?: string) {
+    this.baseURL = `https://${domain || BASE_URL_FALLBACK}`
     this.baseHeaders.Accept = 'application/vnd.spearly.v2+json'
     this.baseHeaders.Authorization = `Bearer ${apiKey}`
   }
