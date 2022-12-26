@@ -1,4 +1,5 @@
-import fetch from 'node-fetch'
+import axios from 'axios'
+import type { AxiosInstance } from 'axios'
 import { camelToSnake, recursiveToCamels } from '../utils'
 import { mapList, mapContent, mapForm, mapFormAnswer } from '../map'
 import { ServerList, ServerContent, ServerForm, ServerFormAnswer } from '../types'
@@ -31,25 +32,22 @@ export type GetParams = {
 }
 
 export class SpearlyApiClient {
-  baseURL: string
-  baseHeaders: BaseHeaders = {
-    Accept: '',
-    Authorization: '',
-  }
+  client: AxiosInstance
 
   constructor(apiKey: string, domain?: string) {
-    this.baseURL = `https://${domain || BASE_URL_FALLBACK}`
-    this.baseHeaders.Accept = 'application/vnd.spearly.v2+json'
-    this.baseHeaders.Authorization = `Bearer ${apiKey}`
+    this.client = axios.create({
+      baseURL: `https://${domain || BASE_URL_FALLBACK}`,
+      headers: {
+        Accept: 'application/vnd.spearly.v2+json',
+        Authorization: `Bearer ${apiKey}`,
+      },
+    })
   }
 
   async getRequest<T>(endpoint: string, queries = ''): Promise<T> {
     try {
-      const response = await fetch(`${this.baseURL}${endpoint}${queries}`, { headers: this.baseHeaders })
-      if (!response.ok) throw new Error(`${response.status}`)
-      const data = await response.json()
-
-      return recursiveToCamels(data)
+      const response = await this.client.get(`${endpoint}${queries}`)
+      return recursiveToCamels(response.data)
     } catch (error: any) {
       if (error.data) throw error.data
       if (error.response?.data) throw error.response.data
@@ -59,15 +57,8 @@ export class SpearlyApiClient {
 
   async postRequest<T>(endpoint: string, params: { [key: string]: unknown }): Promise<T> {
     try {
-      const response = await fetch(`${this.baseURL}${endpoint}`, {
-        method: 'POST',
-        body: JSON.stringify(params),
-        headers: { ...this.baseHeaders, 'Content-Type': 'application/json' },
-      })
-      if (!response.ok) throw new Error(`${response.status}`)
-      const data = await response.json()
-
-      return recursiveToCamels(data)
+      const response = await this.client.post(endpoint, params)
+      return recursiveToCamels(response.data)
     } catch (error: any) {
       if (error.data) throw error.data
       if (error.response?.data) throw error.response.data

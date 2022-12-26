@@ -1,4 +1,7 @@
+// import axios from 'axios'
 import { SpearlyApiClient } from '../../spearly-api-client'
+
+jest.mock('axios')
 
 const serverContent = {
   attributes: {
