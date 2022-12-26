@@ -158,7 +158,7 @@ describe('SpearlyApiClient', () => {
   let apiClient: SpearlyApiClient
 
   beforeEach(() => {
-    apiClient = new SpearlyApiClient('papi.spearly.app', 'API_KEY')
+    apiClient = new SpearlyApiClient('API_KEY', 'papi.spearly.app')
   })
 
   describe('APIへのアクセスポイント', () => {
