@@ -268,6 +268,22 @@ describe('SpearlyApiClient', () => {
         })
         expect(res).toEqual(formAnswer)
       })
+
+      it('confirmation_emailが含まれていた場合も正しく送信できる', async () => {
+        const res = await apiClient.postFormAnswers(1, {
+          name: 'name',
+          content: 'content',
+          confirmation_email: 'test@example.com',
+          _spearly_gotcha: '',
+        })
+        expect(spyRequest).toHaveBeenCalledWith('/form_answers', {
+          form_version_id: 1,
+          fields: { name: 'name', content: 'content' },
+          confirmation_email: 'test@example.com',
+          _spearly_gotcha: '',
+        })
+        expect(res).toEqual(formAnswer)
+      })
     })
   })
 })

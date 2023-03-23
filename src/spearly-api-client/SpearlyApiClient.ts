@@ -94,12 +94,13 @@ export class SpearlyApiClient {
   async postFormAnswers(formVersionId: number, fields: { [key: string]: unknown } & { _spearly_gotcha: string }) {
     if (!('_spearly_gotcha' in fields)) throw new Error('Include "_spearly_gotcha" in the fields.')
     // eslint-disable-next-line camelcase
-    const { _spearly_gotcha, ...paramFields } = fields
+    const { _spearly_gotcha, confirmation_email, ...paramFields } = fields
 
     const response = await this.postRequest<{ answer: ServerFormAnswer }>('/form_answers', {
       form_version_id: formVersionId,
       fields: paramFields,
       _spearly_gotcha,
+      confirmation_email,
     })
 
     return mapFormAnswer(response.answer)
