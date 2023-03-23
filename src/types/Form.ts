@@ -12,10 +12,26 @@ export type Form = {
   publicUid: string
   startedAt: Date | null
   thankYouMessage: string
+  confirmationEmail: {
+    enabled: boolean
+    name: string
+    description: string
+  }
+  confirmationScreen: {
+    enabled: boolean
+    backButtonLabel: string
+    submitButtonLabel: string
+  }
 }
 
 export type ServerForm = {
   createdAt: string
   endedAt: string | null
   startedAt: string | null
+  confirmationEmailEnabled: boolean
+  confirmationEmailName: string
+  confirmationEmailDescription: string
+  confirmationScreenBeforeSubmitEnabled: boolean
+  backButtonLabel: string | null
+  submitButtonLabel: string | null
 } & Omit<Form, 'createdAt' | 'endedAt' | 'startedAt'>
