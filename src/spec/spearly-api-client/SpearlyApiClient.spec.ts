@@ -96,6 +96,12 @@ const serverLatestForm = {
   name: '',
   description: '',
   thankYouMessage: '',
+  confirmationEmailEnabled: true,
+  confirmationEmailName: 'メールアドレス',
+  confirmationEmailDescription: '回答内容のコピーが送信されます。',
+  confirmationScreenBeforeSubmitEnabled: true,
+  backButtonLabel: '戻る',
+  submitButtonLabel: null,
   fields: [
     {
       identifier: 'name',
@@ -120,6 +126,16 @@ const latestForm = {
   name: '',
   description: '',
   thankYouMessage: '',
+  confirmationEmail: {
+    enabled: true,
+    name: 'メールアドレス',
+    description: '回答内容のコピーが送信されます。',
+  },
+  confirmationScreen: {
+    enabled: true,
+    backButtonLabel: '戻る',
+    submitButtonLabel: '',
+  },
   fields: [
     {
       identifier: 'name',
