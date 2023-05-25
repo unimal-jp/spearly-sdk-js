@@ -4,13 +4,13 @@ import type { AnalyticsMetricRequest, AnalyticsPostParams } from '../types'
 import { SpearlyAnalyticsApiClient } from './SpearlyAnalyticsApiClient'
 
 export class SpearlyAnalytics {
-  patternName: AnalyticsMetricRequest['patternName']
-  contentId: AnalyticsMetricRequest['contentId']
+  patternName: AnalyticsMetricRequest['patternName'] | ''
+  contentId: AnalyticsMetricRequest['contentId'] | ''
   client: SpearlyAnalyticsApiClient
 
   constructor(
-    patternName: AnalyticsMetricRequest['patternName'],
-    contentId: AnalyticsMetricRequest['contentId'],
+    patternName: AnalyticsMetricRequest['patternName'] | '',
+    contentId: AnalyticsMetricRequest['contentId'] | '',
     domain?: string
   ) {
     this.patternName = patternName
@@ -22,6 +22,12 @@ export class SpearlyAnalytics {
     const patternName = params?.patternName || this.patternName
     const contentId = params?.contentId || this.contentId
     const sessionExpires = params?.expires || 1800
+
+    if (!patternName || !contentId) {
+      // eslint-disable-next-line no-console
+      console.error('contentId and patternName are required.')
+      return
+    }
 
     const distinctId = this.getCookie('spearly_distinct_id') || nanoid()
     const sessionId = this.getCookie('spearly_session_id') || nanoid()
@@ -48,6 +54,12 @@ export class SpearlyAnalytics {
   async conversion(params?: AnalyticsPostParams) {
     const patternName = params?.patternName || this.patternName
     const contentId = params?.contentId || this.contentId
+
+    if (!patternName || !contentId) {
+      // eslint-disable-next-line no-console
+      console.error('contentId and patternName are required.')
+      return
+    }
 
     const distinctId = this.getCookie('spearly_distinct_id') || nanoid()
 

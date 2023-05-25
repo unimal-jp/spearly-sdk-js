@@ -11,6 +11,10 @@ describe('SpearlyAnalytics', () => {
   const instance = new SpearlyAnalytics('b', 'content_id')
   const spyMetric = jest.spyOn(SpearlyAnalyticsApiClient.prototype, 'postMetric')
 
+  afterEach(() => {
+    spyMetric.mockClear()
+  })
+
   describe('pageView', () => {
     it('引数指定がない場合、初期値を使ってリクエストする', () => {
       instance.pageView()
@@ -41,6 +45,13 @@ describe('SpearlyAnalytics', () => {
         value: 1,
       })
     })
+
+    it('patternNameが指定されていない場合、リクエストは行われない', () => {
+      const wrongInstance = new SpearlyAnalytics('', '')
+      jest.spyOn(console, 'error').mockImplementation()
+      wrongInstance.pageView()
+      expect(spyMetric).not.toHaveBeenCalled()
+    })
   })
 
   describe('conversion', () => {
@@ -68,6 +79,13 @@ describe('SpearlyAnalytics', () => {
         distinctId: 'abcd',
         value: 1,
       })
+    })
+
+    it('patternNameが指定されていない場合、リクエストは行われない', () => {
+      const wrongInstance = new SpearlyAnalytics('', '')
+      jest.spyOn(console, 'error').mockImplementation()
+      wrongInstance.conversion()
+      expect(spyMetric).not.toHaveBeenCalled()
     })
   })
 })
