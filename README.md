@@ -70,6 +70,35 @@ async function() {
 }
 ```
 
+### A/B Testing analytics
+
+#### Page view
+
+If you are using A/B testing, you can run the following code on page load to count impressions.
+
+```js
+import { SpearlyAnalytics } from '@spearly/sdk-js'
+
+const analytics = new SpearlyAnalytics(PATTERN_NAME, CONTENT_ALIAS)
+
+analytics.pageView()
+```
+
+#### Conversion
+
+If you are using A/B testing, you can count conversions by using the conversion method as follows
+
+```js
+import { SpearlyAnalytics } from '@spearly/sdk-js'
+
+const analytics = new SpearlyAnalytics(PATTERN_NAME, CONTENT_ALIAS)
+
+document.querySelector('#submit').addEventListener('submit', () => {
+  analytics.conversion()
+});
+```
+
+
 ## Support TypeScript
 
 Type definitions are also included, so there is no need to add anything else.
