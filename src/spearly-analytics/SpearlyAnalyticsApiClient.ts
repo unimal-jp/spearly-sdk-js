@@ -15,7 +15,18 @@ export class SpearlyAnalyticsApiClient {
 
   async postMetric(data: AnalyticsMetricRequest) {
     return await this.client.post('/metrics', {
-      metric: data,
+      metric: {
+        name: data.name,
+        properties: {
+          resource_type: 'content',
+          resource_id: data.contentId,
+          pattern_name: data.patternName,
+          value: data.value,
+          distinct_id: data.distinctId,
+          session_id: data.sessionId,
+          session_id_expires_in: data.sessionIdExpiresIn,
+        },
+      },
     })
   }
 }
