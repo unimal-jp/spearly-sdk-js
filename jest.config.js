@@ -7,7 +7,9 @@ module.exports = {
   ],
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest',
+    '^.+\\.(js|jsx)$': 'esbuild-jest',
   },
+  transformIgnorePatterns: ['node_modules/(?!nanoid/)'],
   moduleNameMapper: {
     axios: 'axios/dist/node/axios.cjs',
   },
