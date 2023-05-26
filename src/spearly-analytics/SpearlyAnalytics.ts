@@ -1,33 +1,19 @@
 import Cookies from 'js-cookie'
 import { nanoid } from 'nanoid'
-import type { AnalyticsMetricRequest, AnalyticsPostParams } from '../types'
+import type { AnalyticsPostParams } from '../types'
 import { SpearlyAnalyticsApiClient } from './SpearlyAnalyticsApiClient'
 
 export class SpearlyAnalytics {
-  patternName: AnalyticsMetricRequest['patternName'] | ''
-  contentId: AnalyticsMetricRequest['contentId'] | ''
   client: SpearlyAnalyticsApiClient
 
-  constructor(
-    patternName: AnalyticsMetricRequest['patternName'] | '',
-    contentId: AnalyticsMetricRequest['contentId'] | '',
-    domain?: string
-  ) {
-    this.patternName = patternName
-    this.contentId = contentId
+  constructor(domain?: string) {
     this.client = new SpearlyAnalyticsApiClient(domain)
   }
 
-  async pageView(params?: AnalyticsPostParams) {
-    const patternName = params?.patternName || this.patternName
-    const contentId = params?.contentId || this.contentId
+  async pageView(params: AnalyticsPostParams) {
+    const patternName = params.patternName
+    const contentId = params.contentId
     const sessionExpires = params?.expires || 1800
-
-    if (!patternName || !contentId) {
-      // eslint-disable-next-line no-console
-      console.error('contentId and patternName are required.')
-      return
-    }
 
     const distinctId = this.distinctId || nanoid()
     const sessionId = this.sessionId || nanoid()
@@ -51,15 +37,9 @@ export class SpearlyAnalytics {
     })
   }
 
-  async conversion(params?: AnalyticsPostParams) {
-    const patternName = params?.patternName || this.patternName
-    const contentId = params?.contentId || this.contentId
-
-    if (!patternName || !contentId) {
-      // eslint-disable-next-line no-console
-      console.error('contentId and patternName are required.')
-      return
-    }
+  async conversion(params: AnalyticsPostParams) {
+    const patternName = params.patternName
+    const contentId = params.contentId
 
     const distinctId = this.getCookie('spearly_distinct_id') || nanoid()
 
