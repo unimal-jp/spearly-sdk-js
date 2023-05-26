@@ -8,7 +8,6 @@ jest.mock('nanoid', () => {
 jest.mock('../../spearly-analytics/SpearlyAnalyticsApiClient.ts')
 
 describe('SpearlyAnalytics', () => {
-  const instance = new SpearlyAnalytics()
   const spyMetric = jest.spyOn(SpearlyAnalyticsApiClient.prototype, 'postMetric')
   let cookiesGetMock: jest.Mock
 
@@ -21,6 +20,8 @@ describe('SpearlyAnalytics', () => {
     it('引数指定がない場合、初期値を使ってリクエストする', () => {
       cookiesGetMock = jest.fn().mockImplementation(() => '')
       Cookies.get = cookiesGetMock
+
+      const instance = new SpearlyAnalytics()
       instance.pageView({ patternName: 'b', contentId: 'content_id' })
       expect(spyMetric).toHaveBeenCalledWith({
         name: 'impressions',
@@ -36,6 +37,8 @@ describe('SpearlyAnalytics', () => {
     it('cookieから値が取得できた場合はそちらを使用する', () => {
       cookiesGetMock = jest.fn().mockImplementation(() => 'cookie_value')
       Cookies.get = cookiesGetMock
+
+      const instance = new SpearlyAnalytics()
       instance.pageView({
         patternName: 'a',
         contentId: 'content_id_2',
@@ -56,6 +59,8 @@ describe('SpearlyAnalytics', () => {
     it('引数指定がない場合、初期値を使ってリクエストする', () => {
       cookiesGetMock = jest.fn().mockImplementation(() => '')
       Cookies.get = cookiesGetMock
+
+      const instance = new SpearlyAnalytics()
       instance.conversion({ patternName: 'b', contentId: 'content_id' })
       expect(spyMetric).toHaveBeenCalledWith({
         name: 'conversions',
@@ -69,6 +74,8 @@ describe('SpearlyAnalytics', () => {
     it('cookieから値が取得できた場合はそちらを使用する', () => {
       cookiesGetMock = jest.fn().mockImplementation(() => 'cookie_value')
       Cookies.get = cookiesGetMock
+
+      const instance = new SpearlyAnalytics()
       instance.conversion({
         patternName: 'a',
         contentId: 'content_id_2',
@@ -80,20 +87,6 @@ describe('SpearlyAnalytics', () => {
         distinctId: 'cookie_value',
         value: 1,
       })
-    })
-  })
-
-  describe('idの取得', () => {
-    it('distinctIdの取得', () => {
-      cookiesGetMock = jest.fn().mockImplementation(() => 'distinct_value')
-      Cookies.get = cookiesGetMock
-      expect(instance.distinctId).toBe('distinct_value')
-    })
-
-    it('sessionIdの取得', () => {
-      cookiesGetMock = jest.fn().mockImplementation(() => 'session_value')
-      Cookies.get = cookiesGetMock
-      expect(instance.sessionId).toBe('session_value')
     })
   })
 })

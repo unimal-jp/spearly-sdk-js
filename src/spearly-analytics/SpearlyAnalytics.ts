@@ -5,9 +5,13 @@ import { SpearlyAnalyticsApiClient } from './SpearlyAnalyticsApiClient'
 
 export class SpearlyAnalytics {
   client: SpearlyAnalyticsApiClient
+  distinctId: string
+  sessionId: string
 
   constructor(domain?: string) {
     this.client = new SpearlyAnalyticsApiClient(domain)
+    this.distinctId = this.setDistinctId()
+    this.sessionId = this.setSessionId()
   }
 
   async pageView(params: AnalyticsPostParams) {
@@ -15,24 +19,19 @@ export class SpearlyAnalytics {
     const contentId = params.contentId
     const sessionExpires = params?.expires || 1800
 
-    const distinctId = this.distinctId || nanoid()
-    const sessionId = this.sessionId || nanoid()
-
     // MEMO: update distinct_id expires
-    const distinctIdExpires = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).getTime()
-    this.setCookie('spearly_distinct_id', distinctId, distinctIdExpires)
+    this.setDistinctId()
 
     // MEMO: update session_id expires
-    const sessionIdExpires = new Date(Date.now() + sessionExpires * 1000).getTime()
-    this.setCookie('spearly_session_id', sessionId, sessionIdExpires)
+    this.setSessionId()
 
     await this.client.postMetric({
       name: 'impressions',
       contentId,
       patternName,
       value: 1,
-      distinctId,
-      sessionId,
+      distinctId: this.distinctId,
+      sessionId: this.sessionId,
       sessionIdExpiresIn: sessionExpires,
     })
   }
@@ -41,27 +40,30 @@ export class SpearlyAnalytics {
     const patternName = params.patternName
     const contentId = params.contentId
 
-    const distinctId = this.getCookie('spearly_distinct_id') || nanoid()
-
     // MEMO: update distinct_id expires
-    const distinctIdExpires = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).getTime()
-    this.setCookie('spearly_distinct_id', distinctId, distinctIdExpires)
+    this.setDistinctId()
 
     await this.client.postMetric({
       name: 'conversions',
       contentId,
       patternName,
       value: 1,
-      distinctId,
+      distinctId: this.distinctId,
     })
   }
 
-  get distinctId() {
-    return this.getCookie('spearly_distinct_id')
+  private setDistinctId() {
+    const distinctId = this.getCookie('spearly_distinct_id') || nanoid()
+    const distinctIdExpires = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).getTime()
+    this.setCookie('spearly_distinct_id', distinctId, distinctIdExpires)
+    return distinctId
   }
 
-  get sessionId() {
-    return this.getCookie('spearly_session_id')
+  private setSessionId(expires = 1800) {
+    const sessionId = this.getCookie('spearly_session_id') || nanoid()
+    const sessionIdExpires = new Date(Date.now() + expires * 1000).getTime()
+    this.setCookie('spearly_session_id', sessionId, sessionIdExpires)
+    return sessionId
   }
 
   private setCookie(name: string, body: string, expires: number) {
