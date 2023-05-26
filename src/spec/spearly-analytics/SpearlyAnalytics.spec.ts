@@ -19,7 +19,7 @@ describe('SpearlyAnalytics', () => {
     it('引数指定がない場合、初期値を使ってリクエストする', () => {
       instance.pageView()
       expect(spyMetric).toHaveBeenCalledWith({
-        name: 'impression',
+        name: 'impressions',
         patternName: 'b',
         contentId: 'content_id',
         distinctId: 'abcd',
@@ -36,7 +36,7 @@ describe('SpearlyAnalytics', () => {
         expires: 3600,
       })
       expect(spyMetric).toHaveBeenCalledWith({
-        name: 'impression',
+        name: 'impressions',
         patternName: 'a',
         contentId: 'content_id_2',
         distinctId: 'abcd',
@@ -58,7 +58,7 @@ describe('SpearlyAnalytics', () => {
     it('引数指定がない場合、初期値を使ってリクエストする', () => {
       instance.conversion()
       expect(spyMetric).toHaveBeenCalledWith({
-        name: 'conversion',
+        name: 'conversions',
         patternName: 'b',
         contentId: 'content_id',
         distinctId: 'abcd',
@@ -73,7 +73,7 @@ describe('SpearlyAnalytics', () => {
         expires: 3600,
       })
       expect(spyMetric).toHaveBeenCalledWith({
-        name: 'conversion',
+        name: 'conversions',
         patternName: 'a',
         contentId: 'content_id_2',
         distinctId: 'abcd',

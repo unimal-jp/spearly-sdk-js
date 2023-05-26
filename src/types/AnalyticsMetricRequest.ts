@@ -1,5 +1,5 @@
 export type AnalyticsMetricRequest = {
-  name: 'impression' | 'conversion'
+  name: 'impressions' | 'conversions'
   contentId: string
   patternName: 'a' | 'b'
   value?: number

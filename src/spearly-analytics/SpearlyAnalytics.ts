@@ -41,7 +41,7 @@ export class SpearlyAnalytics {
     this.setCookie('spearly_session_id', sessionId, sessionIdExpires)
 
     await this.client.postMetric({
-      name: 'impression',
+      name: 'impressions',
       contentId,
       patternName,
       value: 1,
@@ -68,7 +68,7 @@ export class SpearlyAnalytics {
     this.setCookie('spearly_distinct_id', distinctId, distinctIdExpires)
 
     await this.client.postMetric({
-      name: 'conversion',
+      name: 'conversions',
       contentId,
       patternName,
       value: 1,
