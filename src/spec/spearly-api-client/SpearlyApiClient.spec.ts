@@ -229,14 +229,32 @@ describe('SpearlyApiClient', () => {
     })
 
     describe('getContent: コンテンツの取得', () => {
-      it('APIレスポンスが正常系であればContentにマッピングされたデータが取得することができる', async () => {
+      beforeEach(() => {
         spyRequest = jest
           .spyOn(SpearlyApiClient.prototype, 'getRequest')
           .mockReturnValue(Promise.resolve({ data: serverContent }))
+      })
 
+      afterEach(() => {
+        spyRequest.mockClear()
+      })
+
+      it('APIレスポンスが正常系であればContentにマッピングされたデータが取得することができる', async () => {
         const res = await apiClient.getContent('content_id')
-        expect(spyRequest).toHaveBeenCalledWith('/contents/content_id')
+        expect(spyRequest).toHaveBeenCalledWith('/contents/content_id', '')
         expect(res).toEqual(content)
+      })
+
+      it('paramsが指定されている場合は送信可能なクエリでリクエストする', async () => {
+        await apiClient.getContent('content_id', {
+          distinctId: 'distinct',
+          patternName: 'b',
+          sessionId: 'session',
+        })
+        expect(spyRequest).toHaveBeenCalledWith(
+          '/contents/content_id',
+          '?distinct_id=distinct&pattern_name=b&session_id=session'
+        )
       })
     })
 

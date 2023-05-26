@@ -29,6 +29,14 @@ export type GetParams = {
   filterMode?: 'or' | 'and'
   rangeFrom?: Date
   rangeTo?: Date
+  distinctId?: string
+  sessionId?: string
+}
+
+export type GetContentParams = {
+  distinctId?: string
+  sessionId?: string
+  patternName?: string
 }
 
 export class SpearlyApiClient {
@@ -72,8 +80,9 @@ export class SpearlyApiClient {
     return mapList(response)
   }
 
-  async getContent(contentId: string) {
-    const response = await this.getRequest<{ data: ServerContent }>(`/contents/${contentId}`)
+  async getContent(contentId: string, params?: GetContentParams) {
+    const queries = this.bindQueriesFromParams(params)
+    const response = await this.getRequest<{ data: ServerContent }>(`/contents/${contentId}`, queries)
     return mapContent(response.data)
   }
 
