@@ -43,6 +43,10 @@ async function() {
 
   // when using some options
   const filteredContents =  await apiClient.getList(CONTENT_TYPE_ID, { limit: 10, offset: 20 })
+
+  // if you are using A/B testing
+  const analytics = new SpearlyAnalytics()
+  const abContents = await apiClient.getList(CONTENT_TYPE_ID, { distinctId: analytics.distinctId })
 }
 ```
 
@@ -51,6 +55,10 @@ async function() {
 ```js
 async function() {
   const content = await apiClient.getContent(CONTENT_ID)
+
+  // if you are using A/B testing
+  const analytics = new SpearlyAnalytics()
+  const abContent = await apiClient.getContent(CONTENT_ID, { distinctId: analytics.distinctId })
 }
 ```
 
@@ -79,9 +87,12 @@ If you are using A/B testing, you can run the following code on page load to cou
 ```js
 import { SpearlyAnalytics } from '@spearly/sdk-js'
 
-const analytics = new SpearlyAnalytics(PATTERN_NAME, CONTENT_ALIAS)
+const analytics = new SpearlyAnalytics()
 
-analytics.pageView()
+analytics.pageView({
+  patternName: PATTERN_NAME,
+  contentId: CONTENT_ALIAS,
+})
 ```
 
 #### Conversion
@@ -91,10 +102,13 @@ If you are using A/B testing, you can count conversions by using the conversion 
 ```js
 import { SpearlyAnalytics } from '@spearly/sdk-js'
 
-const analytics = new SpearlyAnalytics(PATTERN_NAME, CONTENT_ALIAS)
+const analytics = new SpearlyAnalytics()
 
 document.querySelector('#submit').addEventListener('submit', () => {
-  analytics.conversion()
+  analytics.conversion({
+    patternName: PATTERN_NAME,
+    contentId: CONTENT_ALIAS,
+  })
 });
 ```
 
