@@ -29,8 +29,8 @@ export class SpearlyAnalytics {
       return
     }
 
-    const distinctId = this.getCookie('spearly_distinct_id') || nanoid()
-    const sessionId = this.getCookie('spearly_session_id') || nanoid()
+    const distinctId = this.distinctId || nanoid()
+    const sessionId = this.sessionId || nanoid()
 
     // MEMO: update distinct_id expires
     const distinctIdExpires = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).getTime()
@@ -74,6 +74,14 @@ export class SpearlyAnalytics {
       value: 1,
       distinctId,
     })
+  }
+
+  get distinctId() {
+    return this.getCookie('spearly_distinct_id')
+  }
+
+  get sessionId() {
+    return this.getCookie('spearly_session_id')
   }
 
   private setCookie(name: string, body: string, expires: number) {

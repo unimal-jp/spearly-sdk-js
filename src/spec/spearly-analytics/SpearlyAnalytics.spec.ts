@@ -1,7 +1,7 @@
+import Cookies from 'js-cookie'
 import { SpearlyAnalytics, SpearlyAnalyticsApiClient } from '../../spearly-analytics'
 
 jest.mock('axios')
-jest.mock('js-cookie')
 jest.mock('nanoid', () => {
   return { nanoid: () => 'abcd' }
 })
@@ -10,13 +10,17 @@ jest.mock('../../spearly-analytics/SpearlyAnalyticsApiClient.ts')
 describe('SpearlyAnalytics', () => {
   const instance = new SpearlyAnalytics('b', 'content_id')
   const spyMetric = jest.spyOn(SpearlyAnalyticsApiClient.prototype, 'postMetric')
+  let cookiesGetMock: jest.Mock
 
   afterEach(() => {
     spyMetric.mockClear()
+    cookiesGetMock.mockClear()
   })
 
   describe('pageView', () => {
     it('引数指定がない場合、初期値を使ってリクエストする', () => {
+      cookiesGetMock = jest.fn().mockImplementation(() => '')
+      Cookies.get = cookiesGetMock
       instance.pageView()
       expect(spyMetric).toHaveBeenCalledWith({
         name: 'impressions',
@@ -30,6 +34,8 @@ describe('SpearlyAnalytics', () => {
     })
 
     it('引数指定がある場合、そちらを優先してリクエストする', () => {
+      cookiesGetMock = jest.fn().mockImplementation(() => 'cookie_value')
+      Cookies.get = cookiesGetMock
       instance.pageView({
         patternName: 'a',
         contentId: 'content_id_2',
@@ -39,8 +45,8 @@ describe('SpearlyAnalytics', () => {
         name: 'impressions',
         patternName: 'a',
         contentId: 'content_id_2',
-        distinctId: 'abcd',
-        sessionId: 'abcd',
+        distinctId: 'cookie_value',
+        sessionId: 'cookie_value',
         sessionIdExpiresIn: 3600,
         value: 1,
       })
@@ -56,6 +62,8 @@ describe('SpearlyAnalytics', () => {
 
   describe('conversion', () => {
     it('引数指定がない場合、初期値を使ってリクエストする', () => {
+      cookiesGetMock = jest.fn().mockImplementation(() => '')
+      Cookies.get = cookiesGetMock
       instance.conversion()
       expect(spyMetric).toHaveBeenCalledWith({
         name: 'conversions',
@@ -67,6 +75,8 @@ describe('SpearlyAnalytics', () => {
     })
 
     it('引数指定がある場合、そちらを優先してリクエストする', () => {
+      cookiesGetMock = jest.fn().mockImplementation(() => 'cookie_value')
+      Cookies.get = cookiesGetMock
       instance.conversion({
         patternName: 'a',
         contentId: 'content_id_2',
@@ -76,7 +86,7 @@ describe('SpearlyAnalytics', () => {
         name: 'conversions',
         patternName: 'a',
         contentId: 'content_id_2',
-        distinctId: 'abcd',
+        distinctId: 'cookie_value',
         value: 1,
       })
     })
@@ -86,6 +96,20 @@ describe('SpearlyAnalytics', () => {
       jest.spyOn(console, 'error').mockImplementation()
       wrongInstance.conversion()
       expect(spyMetric).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('idの取得', () => {
+    it('distinctIdの取得', () => {
+      cookiesGetMock = jest.fn().mockImplementation(() => 'distinct_value')
+      Cookies.get = cookiesGetMock
+      expect(instance.distinctId).toBe('distinct_value')
+    })
+
+    it('sessionIdの取得', () => {
+      cookiesGetMock = jest.fn().mockImplementation(() => 'session_value')
+      Cookies.get = cookiesGetMock
+      expect(instance.sessionId).toBe('session_value')
     })
   })
 })
