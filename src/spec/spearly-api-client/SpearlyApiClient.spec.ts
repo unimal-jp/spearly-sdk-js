@@ -257,12 +257,8 @@ describe('SpearlyApiClient', () => {
       it('paramsが指定されている場合は送信可能なクエリでリクエストする', async () => {
         await apiClient.getContent('content_id', {
           patternName: 'b',
-          sessionId: 'session',
         })
-        expect(spyRequest).toHaveBeenCalledWith(
-          '/contents/content_id',
-          '?pattern_name=b&session_id=session&distinct_id=distinct_id'
-        )
+        expect(spyRequest).toHaveBeenCalledWith('/contents/content_id', '?pattern_name=b&distinct_id=distinct_id')
       })
     })
 

@@ -36,7 +36,6 @@ export type GetParams = {
 
 export type GetContentParams = {
   distinctId?: string
-  sessionId?: string
   patternName?: string
 }
 
