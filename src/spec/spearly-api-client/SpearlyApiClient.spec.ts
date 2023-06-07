@@ -260,7 +260,7 @@ describe('SpearlyApiClient', () => {
         await apiClient.getContent('content_id', {
           patternName: 'b',
         })
-        expect(spyRequest).toHaveBeenCalledWith('/contents/content_id', '?pattern_name=b&distinct_id=distinct_id')
+        expect(spyRequest).toHaveBeenCalledWith('/contents/content_id', '?distinct_id=distinct_id&pattern_name=b')
       })
     })
 

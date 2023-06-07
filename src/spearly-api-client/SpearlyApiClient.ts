@@ -30,6 +30,7 @@ export type GetParams = {
   filterMode?: 'or' | 'and'
   rangeFrom?: Date
   rangeTo?: Date
+  patternName?: 'a' | 'b'
   distinctId?: string
   sessionId?: string
 }
@@ -76,18 +77,16 @@ export class SpearlyApiClient {
     }
   }
 
-  async getList(contentTypeId: string, params?: GetParams) {
-    const p = params || {}
-    p.distinctId = params && params.distinctId ? params.distinctId : this.analytics.distinctId
-    const queries = this.bindQueriesFromParams(p)
+  async getList(contentTypeId: string, params: GetParams = {}) {
+    params.distinctId = params.distinctId ? params.distinctId : this.analytics.distinctId
+    const queries = this.toListParams(params)
     const response = await this.getRequest<ServerList>(`/content_types/${contentTypeId}/contents`, queries)
     return mapList(response)
   }
 
-  async getContent(contentId: string, params?: GetContentParams) {
-    const p = params || {}
-    p.distinctId = params && params.distinctId ? params.distinctId : this.analytics.distinctId
-    const queries = this.bindQueriesFromParams(p)
+  async getContent(contentId: string, params: GetContentParams = {}) {
+    params.distinctId = params.distinctId ? params.distinctId : this.analytics.distinctId
+    const queries = this.toContentParams(params)
     const response = await this.getRequest<{ data: ServerContent }>(`/contents/${contentId}`, queries)
     return mapContent(response.data)
   }
@@ -121,8 +120,8 @@ export class SpearlyApiClient {
     return mapFormAnswer(response.answer)
   }
 
-  bindQueriesFromParams(params?: GetParams): string {
-    if (!params) return ''
+  toListParams(params: GetParams = {}): string {
+    if (!Object.keys(params).length) return ''
     let queries = '?'
 
     Object.keys(params).forEach((param) => {
@@ -162,6 +161,21 @@ export class SpearlyApiClient {
         queries += `${snakeName}=${params[paramName]}&`
       }
     })
+
+    return queries.slice(0, -1)
+  }
+
+  toContentParams(params: GetContentParams = {}): string {
+    if (!Object.keys(params).length) return ''
+    let queries = '?'
+
+    if (params.distinctId) {
+      queries += `distinct_id=${params.distinctId}&`
+    }
+
+    if (params.patternName) {
+      queries += `pattern_name=${params.patternName}&`
+    }
 
     return queries.slice(0, -1)
   }
