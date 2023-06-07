@@ -3,6 +3,10 @@ import { SpearlyApiClient } from '../../spearly-api-client'
 
 jest.mock('axios')
 
+jest.mock('nanoid', () => {
+  return { nanoid: () => 'distinct_id' }
+})
+
 const serverContent = {
   attributes: {
     contentAlias: 'content_1',
@@ -194,20 +198,23 @@ describe('SpearlyApiClient', () => {
 
       it('APIレスポンスが正常系であればListにマッピングされたデータが取得することができる', async () => {
         const res = await apiClient.getList('content_type_id')
-        expect(spyRequest).toHaveBeenCalledWith('/content_types/content_type_id/contents', '')
+        expect(spyRequest).toHaveBeenCalledWith('/content_types/content_type_id/contents', '?distinct_id=distinct_id')
         expect(res).toEqual(list)
       })
 
       it('paramsを指定している場合は送信可能なクエリでリクエストする', () => {
         apiClient.getList('content_type_id', { limit: 5, offset: 6 })
-        expect(spyRequest).toHaveBeenCalledWith('/content_types/content_type_id/contents', '?limit=5&offset=6')
+        expect(spyRequest).toHaveBeenCalledWith(
+          '/content_types/content_type_id/contents',
+          '?limit=5&offset=6&distinct_id=distinct_id'
+        )
       })
 
       it('paramsのordersが正しいクエリでリクエストする', () => {
         apiClient.getList('content_type_id', { orders: { foo: 'asc', bar: 'desc' } })
         expect(spyRequest).toHaveBeenCalledWith(
           '/content_types/content_type_id/contents',
-          '?order_by_foo=asc&order_by_bar=desc'
+          '?order_by_foo=asc&order_by_bar=desc&distinct_id=distinct_id'
         )
       })
 
@@ -215,15 +222,17 @@ describe('SpearlyApiClient', () => {
         apiClient.getList('content_type_id', { filterValue: ['foo', 'bar'] })
         expect(spyRequest).toHaveBeenCalledWith(
           '/content_types/content_type_id/contents',
-          '?filter_value[]=foo&filter_value[]=bar'
+          '?filter_value[]=foo&filter_value[]=bar&distinct_id=distinct_id'
         )
       })
 
       it('paramsにfiltersが正しいクエリでリクエストできる', () => {
-        apiClient.getList('content_type_id', { filters: { blog: ['foo', 'bar'], news: 'test' } })
+        apiClient.getList('content_type_id', {
+          filters: { blog: ['foo', 'bar'], news: 'test' },
+        })
         expect(spyRequest).toHaveBeenCalledWith(
           '/content_types/content_type_id/contents',
-          '?filter_by_blog[]=foo&filter_by_blog[]=bar&filter_by_news=test'
+          '?filter_by_blog[]=foo&filter_by_blog[]=bar&filter_by_news=test&distinct_id=distinct_id'
         )
       })
     })
@@ -241,19 +250,18 @@ describe('SpearlyApiClient', () => {
 
       it('APIレスポンスが正常系であればContentにマッピングされたデータが取得することができる', async () => {
         const res = await apiClient.getContent('content_id')
-        expect(spyRequest).toHaveBeenCalledWith('/contents/content_id', '')
+        expect(spyRequest).toHaveBeenCalledWith('/contents/content_id', '?distinct_id=distinct_id')
         expect(res).toEqual(content)
       })
 
       it('paramsが指定されている場合は送信可能なクエリでリクエストする', async () => {
         await apiClient.getContent('content_id', {
-          distinctId: 'distinct',
           patternName: 'b',
           sessionId: 'session',
         })
         expect(spyRequest).toHaveBeenCalledWith(
           '/contents/content_id',
-          '?distinct_id=distinct&pattern_name=b&session_id=session'
+          '?pattern_name=b&session_id=session&distinct_id=distinct_id'
         )
       })
     })

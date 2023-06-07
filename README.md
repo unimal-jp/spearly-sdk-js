@@ -42,12 +42,7 @@ async function() {
   const contents =  await apiClient.getList(CONTENT_TYPE_ID)
 
   // when using some options
-  const filteredContents =  await apiClient.getList(CONTENT_TYPE_ID, { limit: 10, offset: 20 })
-
-  // if you are using A/B testing
-  const analytics = new SpearlyAnalytics()
-  const abContents = await apiClient.getList(CONTENT_TYPE_ID, { distinctId: analytics.distinctId })
-}
+  const filteredContents =  await apiClient.getList(CONTENT_TYPE_ID, { limit: 10, offset: 20 })}
 ```
 
 ### Get Content
@@ -55,10 +50,6 @@ async function() {
 ```js
 async function() {
   const content = await apiClient.getContent(CONTENT_ID)
-
-  // if you are using A/B testing
-  const analytics = new SpearlyAnalytics()
-  const abContent = await apiClient.getContent(CONTENT_ID, { distinctId: analytics.distinctId })
 }
 ```
 

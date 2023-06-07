@@ -3,6 +3,7 @@ import type { AxiosInstance } from 'axios'
 import { camelToSnake, recursiveToCamels } from '../utils'
 import { mapList, mapContent, mapForm, mapFormAnswer } from '../map'
 import { ServerList, ServerContent, ServerForm, ServerFormAnswer } from '../types'
+import { SpearlyAnalytics } from '../spearly-analytics'
 
 const BASE_URL_FALLBACK = 'api.spearly.com'
 
@@ -41,8 +42,9 @@ export type GetContentParams = {
 
 export class SpearlyApiClient {
   client: AxiosInstance
+  analytics: SpearlyAnalytics
 
-  constructor(apiKey: string, domain?: string) {
+  constructor(apiKey: string, domain?: string, analyticsDomain?: string) {
     this.client = axios.create({
       baseURL: `https://${domain || BASE_URL_FALLBACK}`,
       headers: {
@@ -50,6 +52,7 @@ export class SpearlyApiClient {
         Authorization: `Bearer ${apiKey}`,
       },
     })
+    this.analytics = new SpearlyAnalytics(analyticsDomain)
   }
 
   async getRequest<T>(endpoint: string, queries = ''): Promise<T> {
@@ -75,13 +78,17 @@ export class SpearlyApiClient {
   }
 
   async getList(contentTypeId: string, params?: GetParams) {
-    const queries = this.bindQueriesFromParams(params)
+    const p = params || {}
+    p.distinctId = params && params.distinctId ? params.distinctId : this.analytics.distinctId
+    const queries = this.bindQueriesFromParams(p)
     const response = await this.getRequest<ServerList>(`/content_types/${contentTypeId}/contents`, queries)
     return mapList(response)
   }
 
   async getContent(contentId: string, params?: GetContentParams) {
-    const queries = this.bindQueriesFromParams(params)
+    const p = params || {}
+    p.distinctId = params && params.distinctId ? params.distinctId : this.analytics.distinctId
+    const queries = this.bindQueriesFromParams(p)
     const response = await this.getRequest<{ data: ServerContent }>(`/contents/${contentId}`, queries)
     return mapContent(response.data)
   }
