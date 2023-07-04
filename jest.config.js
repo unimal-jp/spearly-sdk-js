@@ -6,8 +6,7 @@ module.exports = {
     '<rootDir>/src/**/*.spec.ts',
   ],
   transform: {
-    '^.+\\.(ts|tsx)$': 'ts-jest',
-    '^.+\\.(js|jsx)$': 'esbuild-jest',
+    '^.+\\.(ts|tsx)$': 'ts-jest'
   },
   moduleNameMapper: {
     axios: 'axios/dist/node/axios.cjs',
