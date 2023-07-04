@@ -2,8 +2,8 @@ import Cookies from 'js-cookie'
 import { SpearlyAnalytics, SpearlyAnalyticsApiClient } from '../../spearly-analytics'
 
 jest.mock('axios')
-jest.mock('uuidv4', () => {
-  return { uuid: () => 'abcd' }
+jest.mock('uuid', () => {
+  return { v4: () => 'abcd' }
 })
 jest.mock('../../spearly-analytics/SpearlyAnalyticsApiClient.ts')
 

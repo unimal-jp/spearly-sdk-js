@@ -3,8 +3,8 @@ import { SpearlyApiClient } from '../../spearly-api-client'
 
 jest.mock('axios')
 
-jest.mock('uuidv4', () => {
-  return { uuid: () => 'distinct_id' }
+jest.mock('uuid', () => {
+  return { v4: () => 'distinct_id' }
 })
 
 const serverContent = {

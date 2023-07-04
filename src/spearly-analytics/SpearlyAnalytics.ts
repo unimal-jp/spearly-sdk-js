@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-import { uuid } from 'uuidv4'
+import { v4 as uuidv4 } from 'uuid'
 import type { AnalyticsPostParams } from '../types'
 import { SpearlyAnalyticsApiClient } from './SpearlyAnalyticsApiClient'
 
@@ -53,14 +53,14 @@ export class SpearlyAnalytics {
   }
 
   private setDistinctId() {
-    const distinctId = this.getCookie('spearly_distinct_id') || uuid()
+    const distinctId = this.getCookie('spearly_distinct_id') || uuidv4()
     const distinctIdExpires = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).getTime()
     this.setCookie('spearly_distinct_id', distinctId, distinctIdExpires)
     return distinctId
   }
 
   private setSessionId(expires = 1800) {
-    const sessionId = this.getCookie('spearly_session_id') || uuid()
+    const sessionId = this.getCookie('spearly_session_id') || uuidv4()
     const sessionIdExpires = new Date(Date.now() + expires * 1000).getTime()
     this.setCookie('spearly_session_id', sessionId, sessionIdExpires)
     return sessionId
