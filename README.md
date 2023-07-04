@@ -71,6 +71,10 @@ async function() {
 
 ### A/B Testing analytics
 
+> **Warning**  
+> A/B Testing does not support Server side.  
+> We are working on it now, so please wait for a while.
+
 #### Page view
 
 If you are using A/B testing, you can run the following code on page load to count impressions.
