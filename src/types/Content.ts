@@ -8,6 +8,7 @@ export type Content = {
       data: FieldTypeAll[]
     }
     nextContent: Content | null
+    patternName: 'a' | 'b'
     previousContent: Content | null
     publicUid: string
     publishedAt: Date
