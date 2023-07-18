@@ -62,7 +62,7 @@ export class SpearlyApiClient {
     } catch (error: any) {
       if (error.data) throw error.data
       if (error.response?.data) throw error.response.data
-      return Promise.reject(new Error(error))
+      return Promise.reject(error)
     }
   }
 
