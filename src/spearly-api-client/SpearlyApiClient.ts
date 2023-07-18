@@ -55,9 +55,11 @@ export class SpearlyApiClient {
     this.analytics = new SpearlyAnalytics(analyticsDomain)
   }
 
-  async getRequest<T>(endpoint: string, queries = ''): Promise<T> {
+  async getRequest<T>(endpoint: string, queries = '', successStatus: number[]): Promise<T> {
     try {
-      const response = await this.client.get(`${endpoint}${queries}`)
+      const response = await this.client.get(`${endpoint}${queries}`, {
+        validateStatus: (status: number) => successStatus.includes(status),
+      })
       return recursiveToCamels(response.data)
     } catch (error: any) {
       if (error.data) throw error.data
@@ -80,27 +82,28 @@ export class SpearlyApiClient {
   async getList(contentTypeId: string, params: GetParams = {}) {
     params.distinctId = params.distinctId ? params.distinctId : this.analytics.distinctId
     const queries = this.toListParams(params)
-    const response = await this.getRequest<ServerList>(`/content_types/${contentTypeId}/contents`, queries)
+    const response = await this.getRequest<ServerList>(`/content_types/${contentTypeId}/contents`, queries, [200, 304])
     return mapList(response)
   }
 
   async getContent(contentId: string, params: GetContentParams = {}) {
     params.distinctId = params.distinctId ? params.distinctId : this.analytics.distinctId
     const queries = this.toContentParams(params)
-    const response = await this.getRequest<{ data: ServerContent }>(`/contents/${contentId}`, queries)
+    const response = await this.getRequest<{ data: ServerContent }>(`/contents/${contentId}`, queries, [200, 304])
     return mapContent(response.data)
   }
 
   async getContentPreview(contentId: string, previewToken: string) {
     const response = await this.getRequest<{ data: ServerContent }>(
       `/contents/${contentId}`,
-      `?preview_token=${previewToken}`
+      `?preview_token=${previewToken}`,
+      [200, 304]
     )
     return mapContent(response.data)
   }
 
   async getFormLatest(publicUid: string) {
-    const response = await this.getRequest<{ form: ServerForm }>(`/forms/${publicUid}/latest`)
+    const response = await this.getRequest<{ form: ServerForm }>(`/forms/${publicUid}/latest`, '', [200])
     return mapForm(response.form)
   }
 

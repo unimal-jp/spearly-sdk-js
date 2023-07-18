@@ -26,7 +26,9 @@ export class SpearlyAnalyticsApiClient {
           session_id: data.sessionId,
           session_id_expires_in: data.sessionIdExpiresIn,
         },
-      },
+      }
+    }, {
+      validateStatus: (status) => status === 204,
     })
   }
 }
