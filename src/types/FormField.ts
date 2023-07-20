@@ -11,4 +11,5 @@ export type FormField = {
   name: string
   order: number
   required: boolean
+  validationRegex: string
 }
