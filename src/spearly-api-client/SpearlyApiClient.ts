@@ -60,8 +60,6 @@ export class SpearlyApiClient {
       const response = await this.client.get(`${endpoint}${queries}`)
       return recursiveToCamels(response.data)
     } catch (error: any) {
-      if (error.data) throw error.data
-      if (error.response?.data) throw error.response.data
       return Promise.reject(error)
     }
   }
@@ -71,9 +69,7 @@ export class SpearlyApiClient {
       const response = await this.client.post(endpoint, params)
       return recursiveToCamels(response.data)
     } catch (error: any) {
-      if (error.data) throw error.data
-      if (error.response?.data) throw error.response.data
-      return Promise.reject(new Error(error))
+      return Promise.reject(error)
     }
   }
 
