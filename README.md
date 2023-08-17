@@ -49,7 +49,7 @@ async function() {
 
 ```js
 async function() {
-  const content = await apiClient.getContent(CONTENT_ID)
+  const content = await apiClient.getContent(CONTENT_TYPE_ID, CONTENT_ID)
 }
 ```
 
