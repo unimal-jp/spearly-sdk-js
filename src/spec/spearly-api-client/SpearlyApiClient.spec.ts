@@ -253,21 +253,21 @@ describe('SpearlyApiClient', () => {
       })
 
       it('APIレスポンスが正常系であればContentにマッピングされたデータが取得することができる', async () => {
-        const res = await apiClient.getContent('content_id')
-        expect(spyRequest).toHaveBeenCalledWith('/contents/content_id', '?distinct_id=distinct_id')
+        const res = await apiClient.getContent('content_type_id', 'content_id')
+        expect(spyRequest).toHaveBeenCalledWith('/content_types/content_type_id/contents/content_id', '?distinct_id=distinct_id')
         expect(res).toEqual(content)
       })
 
       it('paramsが指定されている場合は送信可能なクエリでリクエストする', async () => {
-        await apiClient.getContent('content_id', {
+        await apiClient.getContent('content_type_id', 'content_id', {
           patternName: 'b',
         })
-        expect(spyRequest).toHaveBeenCalledWith('/contents/content_id', '?distinct_id=distinct_id&pattern_name=b')
+        expect(spyRequest).toHaveBeenCalledWith('/content_types/content_type_id/contents/content_id', '?distinct_id=distinct_id&pattern_name=b')
       })
 
       it('コンテンツタイプを指定してリクエストする', async () => {
-        await apiClient.getContent('content_id', {}, 'blog')
-        expect(spyRequest).toHaveBeenCalledWith('/content_types/blog/contents/content_id', '?distinct_id=distinct_id')
+        await apiClient.getContent('content_type_id', 'content_id', {})
+        expect(spyRequest).toHaveBeenCalledWith('/content_types/content_type_id/contents/content_id', '?distinct_id=distinct_id')
       })
     })
 

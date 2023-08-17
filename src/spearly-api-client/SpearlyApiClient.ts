@@ -80,18 +80,16 @@ export class SpearlyApiClient {
     return mapList(response)
   }
 
-  async getContent(contentId: string, params: GetContentParams = {}, contentTypeId = "") {
+  async getContent(contentTypeId: string, contentId: string, params: GetContentParams = {}) {
     params.distinctId = params.distinctId ? params.distinctId : this.analytics.distinctId
     const queries = this.toContentParams(params)
-    const response = contentTypeId === "" 
-      ? await this.getRequest<{ data: ServerContent }>(`/contents/${contentId}`, queries)
-      : await this.getRequest<{ data: ServerContent }>(`/content_types/${contentTypeId}/contents/${contentId}`, queries)
+    const response = await this.getRequest<{ data: ServerContent }>(`/content_types/${contentTypeId}/contents/${contentId}`, queries)
     return mapContent(response.data)
   }
 
-  async getContentPreview(contentId: string, previewToken: string) {
+  async getContentPreview(contentTypeId: string, contentId: string, previewToken: string) {
     const response = await this.getRequest<{ data: ServerContent }>(
-      `/contents/${contentId}`,
+      `/content_types/${contentTypeId}/contents/${contentId}`,
       `?preview_token=${previewToken}`
     )
     return mapContent(response.data)
