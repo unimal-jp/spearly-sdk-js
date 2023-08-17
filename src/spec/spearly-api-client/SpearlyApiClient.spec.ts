@@ -264,6 +264,11 @@ describe('SpearlyApiClient', () => {
         })
         expect(spyRequest).toHaveBeenCalledWith('/contents/content_id', '?distinct_id=distinct_id&pattern_name=b')
       })
+
+      it('コンテンツタイプを指定してリクエストする', async () => {
+        await apiClient.getContent('content_id', {}, 'blog')
+        expect(spyRequest).toHaveBeenCalledWith('/content_types/blog/contents/content_id', '?distinct_id=distinct_id')
+      })
     })
 
     describe('getFormLatest: フォームの取得', () => {
