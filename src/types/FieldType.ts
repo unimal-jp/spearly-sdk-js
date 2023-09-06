@@ -1,3 +1,5 @@
+import { Content } from './Content'
+
 export type FieldInputType = 'text' | 'number' | 'rich_text' | 'image' | 'calendar' | 'map' | 'content_type' | 'tags'
 
 export type FieldType<T> = {
@@ -17,6 +19,10 @@ export type MapValue = {
   longitude: number
 }
 
+export type ContentTypeValue = {
+  data: Content
+}
+
 export type FieldTypeText = FieldType<string>
 
 export type FieldTypeNumber = FieldType<number>
@@ -31,17 +37,7 @@ export type FieldTypeMap = FieldType<MapValue>
 
 export type FieldTypeTags = FieldType<string[]>
 
-export type FieldTypeContentType = FieldType<
-  (
-    | FieldTypeText
-    | FieldTypeNumber
-    | FieldTypeRichText
-    | FieldTypeImage
-    | FieldTypeCalendar
-    | FieldTypeMap
-    | FieldTypeTags
-  )[]
->
+export type FieldTypeContentType = FieldType<ContentTypeValue>
 
 export type FieldTypeAll =
   | FieldTypeText
