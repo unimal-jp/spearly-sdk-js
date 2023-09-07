@@ -254,7 +254,10 @@ describe('SpearlyApiClient', () => {
 
       it('APIレスポンスが正常系であればContentにマッピングされたデータが取得することができる', async () => {
         const res = await apiClient.getContent('content_type_id', 'content_id')
-        expect(spyRequest).toHaveBeenCalledWith('/content_types/content_type_id/contents/content_id', '?distinct_id=distinct_id')
+        expect(spyRequest).toHaveBeenCalledWith(
+          '/content_types/content_type_id/contents/content_id',
+          '?distinct_id=distinct_id'
+        )
         expect(res).toEqual(content)
       })
 
@@ -262,12 +265,18 @@ describe('SpearlyApiClient', () => {
         await apiClient.getContent('content_type_id', 'content_id', {
           patternName: 'b',
         })
-        expect(spyRequest).toHaveBeenCalledWith('/content_types/content_type_id/contents/content_id', '?distinct_id=distinct_id&pattern_name=b')
+        expect(spyRequest).toHaveBeenCalledWith(
+          '/content_types/content_type_id/contents/content_id',
+          '?distinct_id=distinct_id&pattern_name=b'
+        )
       })
 
       it('コンテンツタイプを指定してリクエストする', async () => {
         await apiClient.getContent('content_type_id', 'content_id', {})
-        expect(spyRequest).toHaveBeenCalledWith('/content_types/content_type_id/contents/content_id', '?distinct_id=distinct_id')
+        expect(spyRequest).toHaveBeenCalledWith(
+          '/content_types/content_type_id/contents/content_id',
+          '?distinct_id=distinct_id'
+        )
       })
     })
 

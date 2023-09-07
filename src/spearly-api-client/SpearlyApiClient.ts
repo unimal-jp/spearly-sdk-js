@@ -83,7 +83,10 @@ export class SpearlyApiClient {
   async getContent(contentTypeId: string, contentId: string, params: GetContentParams = {}) {
     params.distinctId = params.distinctId ? params.distinctId : this.analytics.distinctId
     const queries = this.toContentParams(params)
-    const response = await this.getRequest<{ data: ServerContent }>(`/content_types/${contentTypeId}/contents/${contentId}`, queries)
+    const response = await this.getRequest<{ data: ServerContent }>(
+      `/content_types/${contentTypeId}/contents/${contentId}`,
+      queries
+    )
     return mapContent(response.data)
   }
 
