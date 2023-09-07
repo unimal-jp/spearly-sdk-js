@@ -1,6 +1,6 @@
 {
   "name": "@spearly/sdk-js",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "",
   "main": "dist/cjs/sdk-js.js",
   "module": "dist/esm/sdk-js.js",
