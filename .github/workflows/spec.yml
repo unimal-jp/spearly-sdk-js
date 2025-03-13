@@ -8,7 +8,7 @@ jobs:
   spec:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           ref: main
           fetch-depth: 0
@@ -22,4 +22,3 @@ jobs:
           restore-keys: ${{ runner.os }}-node-${{ github.event_name }}-
       - run: npm i
       - run: npm run test
-  
