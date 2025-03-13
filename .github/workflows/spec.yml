@@ -2,24 +2,25 @@ name: Spec Test
 
 on:
   pull_request:
-    types: [opened]
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
 
 jobs:
   spec:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           ref: main
           fetch-depth: 0
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v3
         with:
           node-version: '14.x'
-      - uses: actions/cache@v1
+      - uses: actions/cache@v4
         with:
           path: node_modules
           key: ${{ runner.os }}-node-${{ github.event_name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: ${{ runner.os }}-node-${{ github.event_name }}-
       - run: npm i
       - run: npm run test
-  
